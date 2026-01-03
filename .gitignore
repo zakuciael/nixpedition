@@ -1,3 +1,11 @@
+# Ignore all editor configs by default
+.idea/*
+.vscode/*
+.zed/*
+
+# Allow only specific editor configs to be pushed to the repo
+!.zed/settings.json
+
 # Ignore build outputs from performing a nix-build or `nix build` command
 result
 result-*
