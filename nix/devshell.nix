@@ -1,6 +1,11 @@
 {
   perSystem =
-    { config, pkgs, ... }:
+    {
+      config,
+      pkgs,
+      inputs',
+      ...
+    }:
     {
       devShells = {
         default = pkgs.mkShell {
@@ -10,6 +15,7 @@
             config.pre-commit.devShell
           ];
           packages = with pkgs; [
+            inputs'.deploy-rs.packages.default
             nixfmt-rfc-style
             nixd
           ];

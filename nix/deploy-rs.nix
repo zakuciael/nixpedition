@@ -1,0 +1,71 @@
+{
+  config,
+  inputs,
+  lib,
+  flake-parts-lib,
+  constants,
+  withSystem,
+  ...
+}:
+let
+  inherit (lib) mapAttrs mkOption types;
+  inherit (flake-parts-lib) mkSubmoduleOptions;
+in
+{
+  options = {
+    flake.deploy = mkSubmoduleOptions {
+      nodes = mkOption {
+        type = types.lazyAttrsOf types.attrs;
+      };
+    };
+  };
+
+  config = {
+    flake-file.inputs = {
+      deploy-rs = {
+        # TODO: Remove rev when merged to upstream
+        url = "github:serokell/deploy-rs?rev=7edf1f4fd866fc5718aa5358dc720f4ee90909e3";
+        inputs = {
+          flake-compat.follows = "flake-compat";
+          utils.follows = "dedupe-flake-utils";
+          nixpkgs.follows = "nixpkgs";
+        };
+      };
+    };
+
+    flake.deploy.nodes =
+      config.flake.nixosConfigurations
+      |> mapAttrs (
+        hostname: host:
+        let
+          inherit (host.pkgs.stdenv.hostPlatform) system;
+        in
+        withSystem system (
+          { inputs', ... }:
+          {
+            inherit hostname;
+            profiles.system = {
+              sshUser = constants.username;
+              user = "root";
+              interactiveSudo = true;
+              autoRollback = true;
+              magicRollback = true;
+              path = inputs'.deploy-rs.lib.activate.nixos host;
+            }
+            // (lib.optionalAttrs (host.config.security.doas.enable or false) {
+              sudo = "doas -u";
+            });
+          }
+        )
+      );
+
+    perSystem =
+      { inputs', ... }:
+      {
+        checks = inputs'.deploy-rs.lib.deployChecks config.flake.deploy;
+      };
+
+    # Enable transposition for `deploy-rs.lib`
+    transposition.lib = { };
+  };
+}
