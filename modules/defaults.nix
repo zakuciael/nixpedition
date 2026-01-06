@@ -73,6 +73,7 @@
             curl
             git
             neovim
+            pciutils
           ];
 
           # Default nix settings
