@@ -12,6 +12,8 @@
     includes = [
       <hardware/amdgpu>
       <hardware/amdgpu/sea-islands>
+      <services/ollama>
+      <services/ollama/vulkan>
     ];
 
     nixos.services.openssh.enable = true;
