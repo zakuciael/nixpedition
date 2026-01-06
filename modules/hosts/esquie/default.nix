@@ -1,9 +1,18 @@
 # Homelab configuration
-{ constants, ... }:
+{
+  constants,
+  # deadnix: skip
+  __findFile ? __findFile,
+  ...
+}:
 {
   den.hosts.x86_64-linux.esquie.users."${constants.username}" = { };
 
   den.aspects.esquie = {
+    includes = [
+      <hardware/amdgpu>
+      <hardware/amdgpu/sea-islands>
+    ];
 
     nixos.services.openssh.enable = true;
 
