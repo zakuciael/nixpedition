@@ -4,11 +4,8 @@
   den.hosts.x86_64-linux.esquie.users."${constants.username}" = { };
 
   den.aspects.esquie = {
-    nixos = {
-      imports = [ ./_hardware.nix ];
 
-      services.openssh.enable = true;
-    };
+    nixos.services.openssh.enable = true;
 
     provides."${constants.username}" =
       { user, ... }:

@@ -14,7 +14,6 @@
       includes = [
         # Include disko configurations for all hosts
         <den/define-disks>
-        # den._.define-disks
 
         # Automatically create the user on host.
         <den/define-user>
@@ -29,11 +28,16 @@
         den._.inputs'
         den._.self'
 
-        # Automatically set hostname
+        # Automatically set hostname and hardware configuration
         (den.lib.take.exactly (
           { OS, host }:
           den.lib.take.unused OS {
-            nixos.networking.hostName = host.hostName;
+            nixos = {
+              imports = [
+                { hardware.facter.reportPath = ./hosts/${host.hostName}/facter.json; }
+              ];
+              networking.hostName = host.hostName;
+            };
           }
         ))
 
