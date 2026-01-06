@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   flake-parts-lib,
   constants,
