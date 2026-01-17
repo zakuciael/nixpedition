@@ -1,10 +1,15 @@
 {
+  lib,
   constants,
   den,
   # deadnix: skip
   __findFile ? __findFile,
   ...
 }:
+let
+  inherit (lib) mkDefault optionals;
+  inherit (den.lib) take parametric;
+in
 {
   den = {
     # Default home-manager user on all hosts
@@ -13,7 +18,7 @@
     default = {
       includes = [
         # Include disko configurations for all hosts
-        <den/define-disks>
+        <disko/define-disks>
 
         # Automatically create the user on host.
         <den/define-user>
@@ -29,15 +34,23 @@
         den._.self'
 
         # Automatically set hostname and hardware configuration
-        (den.lib.take.exactly (
+        (take.exactly (
           { OS, host }:
-          den.lib.take.unused OS {
-            nixos = {
-              imports = [
-                { hardware.facter.reportPath = ./hosts/${host.hostName}/facter.json; }
-              ];
-              networking.hostName = host.hostName;
-            };
+          take.unused OS {
+            nixos =
+              let
+                inherit (builtins) pathExists substring stringLength;
+                reportPath = ./hosts/${host.hostName}/facter.json;
+                reportPathOrNull = if (pathExists reportPath) then reportPath else null;
+                relReportPath = "." + substring (stringLength (toString ./.)) (-1) (toString reportPath);
+              in
+              {
+                hardware.facter.reportPath = lib.warnIf (reportPathOrNull == null) ''
+                  The nixos-facter report file for host "${host.hostName}" is missing.
+                  Please generate it in the following path: "${relReportPath}"
+                '' reportPathOrNull;
+                networking.hostName = host.hostName;
+              };
           }
         ))
 
@@ -47,7 +60,7 @@
             mutual = from: to: den.aspects.${from.aspect}._.${to.aspect} or { };
           in
           { host, user, ... }@ctx:
-          den.lib.parametric.fixedTo ctx {
+          parametric.fixedTo ctx {
             includes = [
               (mutual user host)
               (mutual host user)
