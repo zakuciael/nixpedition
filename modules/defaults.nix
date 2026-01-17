@@ -74,6 +74,7 @@ in
         {
           # Default bootloader
           boot.loader = {
+            timeout = mkDefault 1;
             grub = {
               efiSupport = true;
               efiInstallAsRemovable = true;
