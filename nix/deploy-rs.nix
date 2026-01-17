@@ -1,9 +1,9 @@
 {
   config,
   lib,
+  inputs,
   flake-parts-lib,
   constants,
-  withSystem,
   ...
 }:
 let
@@ -39,32 +39,26 @@ in
         let
           inherit (host.pkgs.stdenv.hostPlatform) system;
         in
-        withSystem system (
-          { inputs', ... }:
-          {
-            inherit hostname;
-            profiles.system = {
-              sshUser = constants.username;
-              user = "root";
-              interactiveSudo = true;
-              autoRollback = true;
-              magicRollback = true;
-              path = inputs'.deploy-rs.lib.activate.nixos host;
-            }
-            // (lib.optionalAttrs (host.config.security.doas.enable or false) {
-              sudo = "doas -u";
-            });
+        {
+          inherit hostname;
+          profiles.system = {
+            sshUser = constants.username;
+            user = "root";
+            interactiveSudo = true;
+            autoRollback = true;
+            magicRollback = true;
+            path = inputs.deploy-rs.lib.${system}.activate.nixos host;
           }
-        )
+          // (lib.optionalAttrs (host.config.security.doas.enable or false) {
+            sudo = "doas -u";
+          });
+        }
       );
 
     perSystem =
-      { inputs', ... }:
+      { system, ... }:
       {
-        checks = inputs'.deploy-rs.lib.deployChecks config.flake.deploy;
+        checks = inputs.deploy-rs.lib.${system}.deployChecks config.flake.deploy;
       };
-
-    # Enable transposition for `deploy-rs.lib`
-    transposition.lib = { };
   };
 }
