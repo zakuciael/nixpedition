@@ -7,8 +7,7 @@
   ...
 }:
 let
-  inherit (lib) mkDefault optionals;
-  inherit (den.lib) take parametric;
+  inherit (lib) mkDefault;
 in
 {
   den = {
@@ -33,40 +32,14 @@ in
         den._.inputs'
         den._.self'
 
-        # Automatically set hostname and hardware configuration
-        (take.exactly (
-          { OS, host }:
-          take.unused OS {
-            nixos =
-              let
-                inherit (builtins) pathExists substring stringLength;
-                reportPath = ./hosts/${host.hostName}/facter.json;
-                reportPathOrNull = if (pathExists reportPath) then reportPath else null;
-                relReportPath = "." + substring (stringLength (toString ./.)) (-1) (toString reportPath);
-              in
-              {
-                hardware.facter.reportPath = lib.warnIf (reportPathOrNull == null) ''
-                  The nixos-facter report file for host "${host.hostName}" is missing.
-                  Please generate it in the following path: "${relReportPath}"
-                '' reportPathOrNull;
-                networking.hostName = host.hostName;
-              };
-          }
-        ))
+        # Automatically set hardware configuration
+        <lib/define-hardware>
 
-        # Create an aspect "routing" pattern.
-        (
-          let
-            mutual = from: to: den.aspects.${from.aspect}._.${to.aspect} or { };
-          in
-          { host, user, ... }@ctx:
-          parametric.fixedTo ctx {
-            includes = [
-              (mutual user host)
-              (mutual host user)
-            ];
-          }
-        )
+        # Automatically set hostname
+        <lib/define-hostname>
+
+        # Allow host to configure user and vice-versa
+        <lib/aspect-router>
       ];
 
       nixos =
