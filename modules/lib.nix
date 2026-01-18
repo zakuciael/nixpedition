@@ -53,6 +53,27 @@ in
       ];
     };
 
+    define-user = parametric {
+      description = ''
+        Defines a user at OS and Home levels and automatically sets authorized keys and user password.
+      '';
+
+      includes = [
+        <den/define-user>
+        (
+          { host, user, ... }:
+          take.unused host {
+            nixos.users.users.${user.userName} = {
+              openssh.authorizedKeys.keys = user.authorizedKeys or [ ];
+              initialHashedPassword = user.initialHashedPassword or null;
+              hashedPassword = user.hashedPassword or null;
+              hashedPasswordFile = user.hashedPasswordFile or null;
+            };
+          }
+        )
+      ];
+    };
+
     aspect-router = (
       let
         mutual = from: to: den.aspects.${from.aspect}._.${to.aspect} or { };

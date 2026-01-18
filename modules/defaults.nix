@@ -20,7 +20,7 @@ in
         <disko/define-disks>
 
         # Automatically create the user on host.
-        <den/define-user>
+        <lib/define-user>
 
         # Automatically set user as *primary*.
         <den/primary-user>
