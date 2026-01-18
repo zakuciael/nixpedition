@@ -55,9 +55,10 @@ nixpedition/
 
 Here is a list of all my machines running NixOS:
 
-- [**Maelle**](/modules/hosts/maelle) - My main workstation on which I do most of the work and play games.
-- [**Sciel**](/modules/hosts/sciel) - A [Framework 16](https://frame.work/pl/en/laptop16) laptop for an on-route work.
-- [**Esquie**](/modules/hosts/esquie) - My HomeLab server where I deploy all my self-hosted apps.
+- [**Maelle**](/modules/hosts/maelle) - My main workstation where I do most of my work and play games.
+- [**Sciel**](/modules/hosts/sciel) - My [Framework 16](https://frame.work/pl/en/laptop16) laptop for working on the go and ~~chilling in the Starbucks~~ (_I forgot that I don't go outside..._).
+- [**Esquie**](/modules/hosts/esquie) - HomeLab server that hosts my private, self‑hosted applications.
+- [**Francois**](/modules/hosts/francois) - VPS for publicly available services.
 
 Each machine can communicate with each other using [Tailscale](https://tailscale.com/).
 
