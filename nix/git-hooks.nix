@@ -28,11 +28,11 @@
               always_run = true;
               pass_filenames = false;
             };
-            write-files = {
+            write-compat-files = {
               enable = true;
-              name = "write-files";
+              name = "write-compat-files";
               description = "Generate files using mightyiam/files";
-              entry = "${config.packages.write-files}/bin/write-files";
+              entry = "${config.packages.write-compat-files}/bin/write-files";
               always_run = true;
               pass_filenames = false;
             };

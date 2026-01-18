@@ -1,3 +1,6 @@
+# DO-NOT-EDIT. This file was auto-generated using github:mightyiam/files.
+# Use `nix run .#write-compat-files` to regenerate it.
+
 (import (
   let
     lock = builtins.fromJSON (builtins.readFile ./flake.lock);

@@ -15,6 +15,10 @@
   perSystem =
     { config, pkgs, ... }:
     let
+      warningMsg = ''
+        # DO-NOT-EDIT. This file was auto-generated using github:mightyiam/files.
+        # Use `nix run .#write-compat-files` to regenerate it.
+      '';
       compatBase = ''
         (import (
           let
@@ -31,19 +35,21 @@
     in
     {
       packages = {
-        write-files = config.files.writer.drv;
+        write-compat-files = config.files.writer.drv;
       };
 
       files.files = [
         {
           path_ = "shell.nix";
           drv = pkgs.writeText "shell.nix" ''
+            ${warningMsg}
             ${compatBase}.shellNix
           '';
         }
         {
           path_ = "nixd.nix";
           drv = pkgs.writeText "nixd.nix" ''
+            ${warningMsg}
             let
               outputs =
                 ${compatBase}.outputs;
