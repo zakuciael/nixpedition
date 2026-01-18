@@ -12,11 +12,10 @@
     includes = [
       <hardware/amdgpu>
       <hardware/amdgpu/sea-islands>
+      <services/openssh>
       <services/ollama>
       <services/ollama/vulkan>
     ];
-
-    nixos.services.openssh.enable = true;
 
     provides."${constants.username}" =
       { user, ... }:
