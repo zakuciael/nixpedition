@@ -3,7 +3,6 @@
   lib,
   inputs,
   flake-parts-lib,
-  constants,
   ...
 }:
 let
@@ -42,7 +41,6 @@ in
         {
           inherit hostname;
           profiles.system = {
-            sshUser = constants.username;
             user = "root";
             interactiveSudo = true;
             autoRollback = true;
