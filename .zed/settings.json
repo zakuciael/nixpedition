@@ -1,4 +1,9 @@
 {
+  "languages": {
+    "Nix": {
+      "language_servers": ["nixd", "!nil", "!codebook", "..."],
+    },
+  },
   "lsp": {
     "nixd": {
       "settings": {
