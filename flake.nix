@@ -25,7 +25,10 @@
       };
       url = "github:serokell/deploy-rs?rev=7edf1f4fd866fc5718aa5358dc720f4ee90909e3";
     };
-    disko.url = "github:nix-community/disko";
+    disko = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/disko";
+    };
     files.url = "github:mightyiam/files";
     flake-aspects.url = "github:vic/flake-aspects";
     flake-compat = {
