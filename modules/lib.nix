@@ -6,6 +6,7 @@
   ...
 }:
 let
+  inherit (lib) optionalAttrs;
   inherit (den.lib) take parametric;
   inherit (builtins) pathExists substring stringLength;
 in
@@ -63,12 +64,20 @@ in
         (
           { host, user, ... }:
           take.unused host {
-            nixos.users.users.${user.userName} = {
-              openssh.authorizedKeys.keys = user.authorizedKeys or [ ];
-              initialHashedPassword = user.initialHashedPassword or null;
-              hashedPassword = user.hashedPassword or null;
-              hashedPasswordFile = user.hashedPasswordFile or null;
-            };
+            nixos.users.users.${user.userName} =
+              { }
+              // optionalAttrs (user ? authorizedKeys) {
+                openssh.authorizedKeys.keys = user.authorizedKeys;
+              }
+              // optionalAttrs (user ? initialHashedPassword) {
+                inherit (user) initialHashedPassword;
+              }
+              // optionalAttrs (user ? hashedPassword) {
+                inherit (user) hashedPassword;
+              }
+              // optionalAttrs (user ? hashedPasswordFile) {
+                inherit (user) hashedPasswordFile;
+              };
           }
         )
       ];
