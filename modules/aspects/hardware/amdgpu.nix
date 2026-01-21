@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  den.aspects.hardware.provides.amdgpu = {
+  hardware.amdgpu = {
     # Support for Sea Islands cards
     provides.sea-islands.nixos = {
       imports = with inputs.nixos-hardware.nixosModules; [
