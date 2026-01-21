@@ -5,8 +5,8 @@
   __findFile ? __findFile,
   ...
 }:
-{
-  den.hosts.x86_64-linux.francois.users = {
+let
+  users = {
     "${constants.username}" = {
       hashedPassword = "$6$nCtzLAPQUu7StH/H$jmJctHePYNIhHYWfnJCFhtoC.oh/trRIZRHJNre9hnGOceo4GLz6ym5WTQutg7D.6ftZgcVUrHBz/2rM056n61";
       authorizedKeys = [
@@ -19,6 +19,14 @@
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIWEx3CLNKr82fffjdp7FhIqw/l7iUpj8fC4fkAAtfY0"
       ];
     };
+  };
+in
+{
+  den.hosts.x86_64-linux.francois.users = users;
+  den.hosts.x86_64-linux.francois-vm = {
+    inherit users;
+
+    tags = [ "vm" ];
   };
 
   den.aspects.francois = {
