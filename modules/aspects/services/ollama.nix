@@ -4,7 +4,7 @@
   ...
 }:
 {
-  den.aspects.services.provides.ollama = {
+  services.ollama = {
     includes = [
       (<den/unfree> [ "open-webui" ])
     ];
