@@ -1,6 +1,8 @@
 {
+  self,
   lib,
   den,
+  inputs,
   # deadnix: skip
   __findFile ? __findFile,
   ...
@@ -8,7 +10,12 @@
 let
   inherit (lib) optionalAttrs;
   inherit (den.lib) take parametric;
-  inherit (builtins) pathExists substring stringLength;
+  inherit (builtins)
+    elem
+    pathExists
+    substring
+    stringLength
+    ;
 in
 {
 
@@ -36,19 +43,45 @@ in
       includes = [
         (
           { OS, host }:
-          take.unused OS {
-            nixos =
-              let
-                reportPath = ./hosts/${host.hostName}/facter.json;
-                reportPathOrNull = if (pathExists reportPath) then reportPath else null;
-                relReportPath = "." + substring (stringLength (toString ./.)) (-1) (toString reportPath);
-              in
-              {
-                hardware.facter.reportPath = lib.warnIf (reportPathOrNull == null) ''
-                  The nixos-facter report file for host "${host.hostName}" is missing.
-                  Please generate it in the following path: "${relReportPath}"
-                '' reportPathOrNull;
-              };
+          take.unused OS (
+            optionalAttrs (!elem "vm" (host.tags or [ ])) {
+              nixos =
+                let
+                  reportPath = ./hosts/${host.hostName}/facter.json;
+                  reportPathOrNull = if (pathExists reportPath) then reportPath else null;
+                  relReportPath = "." + substring (stringLength (toString ./.)) (-1) (toString reportPath);
+                in
+                {
+                  hardware.facter.reportPath = lib.warnIf (reportPathOrNull == null) ''
+                    The nixos-facter report file for host "${host.hostName}" is missing.
+                    Please generate it in the following path: "${relReportPath}"
+                  '' reportPathOrNull;
+                };
+            }
+          )
+        )
+      ];
+    };
+
+    define-disks = den.lib.parametric.exactly {
+      description = lib.literalMD ''
+        Defines a disks configuration at the OS level using disko.
+        ```
+      '';
+
+      includes = [
+        (
+          { OS, host }:
+          den.lib.take.unused OS {
+            nixos = {
+              imports = [
+                inputs.disko.nixosModules.default
+              ];
+
+              config = lib.warnIfNot (self.diskoConfigurations ? "${host.hostName}") ''
+                The disko configuration for host "${host.hostName}" is not defined.
+              '' (self.diskoConfigurations."${host.hostName}" or { });
+            };
           }
         )
       ];
