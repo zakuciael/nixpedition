@@ -16,6 +16,10 @@ in
 
     default = {
       includes = [
+        # Common hardware config for all hosts
+        <hardware/hw-detect>
+        # <hardware/bootable>
+
         # Include disko configurations for all hosts
         <lib/define-disks>
 
