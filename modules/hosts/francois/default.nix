@@ -1,9 +1,8 @@
 # VPS configuration
-{
-  constants,
-  # deadnix: skip
-  __findFile ? __findFile,
-  ...
+{ constants
+, # deadnix: skip
+  __findFile ? __findFile
+, ...
 }:
 {
   den.hosts.x86_64-linux.francois.users = {
@@ -24,6 +23,7 @@
   den.aspects.francois = {
     includes = [
       <services/openssh>
+      <services/frp>
     ];
   };
 }
