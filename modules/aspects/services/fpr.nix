@@ -9,7 +9,12 @@
       services = {
         frp = {
           enable = true;
-          settings.bindPort = 7000;
+          settings = {
+            bindPort = 7000;
+            auth.method = "token";
+            auth.tokenSource.type = "file";
+            auth.tokenSource.file.path = "/etc/frp-auth-token";
+          };
           role = "server";
         };
       };
