@@ -13,75 +13,50 @@ in
 {
 
   den.aspects.lib.provides = {
-    define-hostname = parametric.exactly {
-      description = ''
-        Automatically set hostname using den's host configuration
-      '';
+    # Automatically set machine hostname
+    define-hostname = take.exactly (
+      { host }:
+      {
+        nixos.networking.hostName = host.hostName;
+      }
+    );
 
-      includes = [
-        (
-          { OS, host }:
-          take.unused OS {
-            nixos.networking.hostName = host.hostName;
+    # Automatically set hardware configuration using nixos-facter
+    define-hardware = take.exactly (
+      { host }:
+      let
+        reportPath = ./hosts/${host.hostName}/facter.json;
+        reportPathOrNull = if (pathExists reportPath) then reportPath else null;
+        relReportPath = "." + substring (stringLength (toString ./.)) (-1) (toString reportPath);
+      in
+      {
+        nixos.hardware.facter.reportPath = lib.warnIf (reportPathOrNull == null) ''
+          The nixos-facter report file for host "${host.hostName}" is missing.
+          Please generate it in the following path: "${relReportPath}"
+        '' reportPathOrNull;
+      }
+    );
+
+    # Define user's authorized keys and password
+    define-user = take.exactly (
+      { host, user }:
+      take.unused host {
+        nixos.users.users.${user.userName} =
+          { }
+          // optionalAttrs (user ? authorizedKeys) {
+            openssh.authorizedKeys.keys = user.authorizedKeys;
           }
-        )
-      ];
-    };
-
-    define-hardware = parametric.exactly {
-      description = ''
-        Automatically set hardware configuration using nixos-facter
-      '';
-
-      includes = [
-        (
-          { OS, host }:
-          take.unused OS {
-            nixos =
-              let
-                reportPath = ./hosts/${host.hostName}/facter.json;
-                reportPathOrNull = if (pathExists reportPath) then reportPath else null;
-                relReportPath = "." + substring (stringLength (toString ./.)) (-1) (toString reportPath);
-              in
-              {
-                hardware.facter.reportPath = lib.warnIf (reportPathOrNull == null) ''
-                  The nixos-facter report file for host "${host.hostName}" is missing.
-                  Please generate it in the following path: "${relReportPath}"
-                '' reportPathOrNull;
-              };
+          // optionalAttrs (user ? initialHashedPassword) {
+            inherit (user) initialHashedPassword;
           }
-        )
-      ];
-    };
-
-    define-user = parametric {
-      description = ''
-        Defines a user at OS and Home levels and automatically sets authorized keys and user password.
-      '';
-
-      includes = [
-        <den/define-user>
-        (
-          { host, user, ... }:
-          take.unused host {
-            nixos.users.users.${user.userName} =
-              { }
-              // optionalAttrs (user ? authorizedKeys) {
-                openssh.authorizedKeys.keys = user.authorizedKeys;
-              }
-              // optionalAttrs (user ? initialHashedPassword) {
-                inherit (user) initialHashedPassword;
-              }
-              // optionalAttrs (user ? hashedPassword) {
-                inherit (user) hashedPassword;
-              }
-              // optionalAttrs (user ? hashedPasswordFile) {
-                inherit (user) hashedPasswordFile;
-              };
+          // optionalAttrs (user ? hashedPassword) {
+            inherit (user) hashedPassword;
           }
-        )
-      ];
-    };
+          // optionalAttrs (user ? hashedPasswordFile) {
+            inherit (user) hashedPasswordFile;
+          };
+      }
+    );
 
     aspect-router = (
       let
