@@ -13,6 +13,7 @@
         (inputs.import-tree [
           ./nix
           ./modules
+          ./hosts
         ])
       ];
     }

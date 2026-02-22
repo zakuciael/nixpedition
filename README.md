@@ -39,8 +39,8 @@ This repo is structured with [flake-parts](https://flake.parts/getting-started.h
 
 ```
 nixpedition/
+├── hosts/                 → Host configurations
 ├── modules/
-│   ├── hosts/             → Host configurations
 │   ├── lib.nix            → Custom "batteries"
 │   └── defaults.nix       → Defaults for all machines
 ├── nix/                   → Flake configurations

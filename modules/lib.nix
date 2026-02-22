@@ -25,7 +25,7 @@ in
     define-hardware = take.exactly (
       { host }:
       let
-        reportPath = ./hosts/${host.hostName}/facter.json;
+        reportPath = ../hosts/${host.hostName}/facter.json;
         reportPathOrNull = if (pathExists reportPath) then reportPath else null;
         relReportPath = "." + substring (stringLength (toString ./.)) (-1) (toString reportPath);
       in
