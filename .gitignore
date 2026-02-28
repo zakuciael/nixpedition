@@ -5,6 +5,7 @@
 
 # Allow only specific editor configs to be pushed to the repo
 !.zed/settings.json
+!.zed/tasks.json
 
 # Ignore build outputs from performing a nix-build or `nix build` command
 result

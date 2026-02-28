@@ -1,0 +1,23 @@
+[
+  {
+    "label": "Run flake check",
+    "command": "nix flake check",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "show_command": false,
+  },
+  {
+    "label": "Generate flake.nix file",
+    "command": "nix run .#write-flake",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "show_command": false,
+  },
+  {
+    "label": "Generate compat files",
+    "command": "nix run .#write-compat-files",
+    "use_new_terminal": false,
+    "allow_concurrent_runs": false,
+    "show_command": false,
+  },
+]
