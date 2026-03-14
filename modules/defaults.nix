@@ -98,6 +98,9 @@ in
         '';
       };
 
+      # Terminfo support
+      environment.enableAllTerminfo = true;
+
       # State version
       system.stateVersion = "25.11";
     };
