@@ -7,7 +7,7 @@
 }:
 let
   inherit (den.lib) parametric;
-  inherit (lib) mkDefault;
+  inherit (lib) mkDefault getExe;
 in
 {
   den.ctx.host.includes = [
@@ -20,10 +20,18 @@ in
   ];
 
   # Default Home-Manager settings
-  den.default.homeManager = {
-    # State version
-    home.stateVersion = "25.11";
-  };
+  den.default.homeManager =
+    { pkgs, ... }:
+    {
+      home = {
+        shellAliases = {
+          "vim" = "${getExe pkgs.neovim}";
+        };
+
+        # State version
+        stateVersion = "25.11";
+      };
+    };
 
   # Default host config if Home-Manager is present
   den.ctx.hm-host.nixos.home-manager = {
