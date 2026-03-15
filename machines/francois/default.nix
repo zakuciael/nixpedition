@@ -17,6 +17,7 @@
       <services/openssh>
       <services/frp>
       <services/reverse-proxy>
+      <services/zitadel>
     ];
 
     _.to-users.includes = [
