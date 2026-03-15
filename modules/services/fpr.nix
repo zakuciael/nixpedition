@@ -3,7 +3,10 @@
     { config, pkgs, ... }:
     {
       clan.core.vars.generators."frp-auth-token" = {
-        files."token".secret = true;
+        files."token" = {
+          secret = true;
+          restartUnits = [ "frp.service" ];
+        };
 
         script = /* bash */ ''
           dd if=/dev/urandom bs=512 count=1 2>/dev/null | base64 -i -w 0 > $out/token
