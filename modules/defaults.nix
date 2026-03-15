@@ -7,7 +7,7 @@
 }:
 let
   inherit (den.lib) parametric;
-  inherit (lib) mkDefault;
+  inherit (lib) mkDefault getExe;
 in
 {
   den.ctx.host.includes = [
@@ -20,10 +20,18 @@ in
   ];
 
   # Default Home-Manager settings
-  den.default.homeManager = {
-    # State version
-    home.stateVersion = "25.11";
-  };
+  den.default.homeManager =
+    { pkgs, ... }:
+    {
+      home = {
+        shellAliases = {
+          "vim" = "${getExe pkgs.neovim}";
+        };
+
+        # State version
+        stateVersion = "25.11";
+      };
+    };
 
   # Default host config if Home-Manager is present
   den.ctx.hm-host.nixos.home-manager = {
@@ -96,6 +104,27 @@ in
         extraOptions = ''
           experimental-features = nix-command flakes pipe-operators
         '';
+      };
+
+      # Time, Locale and Keyboard layout
+      time.timeZone = "Europe/Warsaw";
+      console.keyMap = "pl";
+      services.xserver.xkb.layout = "pl";
+      i18n = {
+        defaultLocale = "en_US.UTF-8";
+        consoleUseXkbConfig = true;
+
+        extraLocaleSettings = {
+          LC_ADDRESS = "pl_PL.UTF-8";
+          LC_IDENTIFICATION = "pl_PL.UTF-8";
+          LC_MEASUREMENT = "pl_PL.UTF-8";
+          LC_MONETARY = "pl_PL.UTF-8";
+          LC_NAME = "pl_PL.UTF-8";
+          LC_NUMERIC = "pl_PL.UTF-8";
+          LC_PAPER = "pl_PL.UTF-8";
+          LC_TELEPHONE = "pl_PL.UTF-8";
+          LC_TIME = "pl_PL.UTF-8";
+        };
       };
 
       # Terminfo support
