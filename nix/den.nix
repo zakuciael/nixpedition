@@ -42,8 +42,8 @@ in
   imports = [
     inputs.den.flakeModule
 
-    # Import the default flake-module from the `machines/**/default.nix` file.
-    (inputs.import-tree.filter (lib.hasSuffix "default.nix") ../machines)
+    # Import all non-clan files in the `machines/<host>` directory as flake-modules.
+    (inputs.import-tree.matchNot ".*/(disko|configuration|hardware-configuration)\.nix" ../machines)
   ];
 
   options = {
