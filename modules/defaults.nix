@@ -85,6 +85,15 @@ in
         };
       };
 
+      # Networking options
+      networking = {
+        # Explicitly ensure that the Firewall is enabled.
+        firewall.enable = true;
+
+        # Set `nftables` as the default Firewall backend.
+        nftables.enable = true;
+      };
+
       # Default packages
       environment.systemPackages = with pkgs; [
         curl
