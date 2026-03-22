@@ -29,7 +29,8 @@
             echo "      This is due to the \`spice\` URL protocol not being registered in the system."
             echo ""
 
-            echo "To run a VM use \`clan vms run <machine> -p 2222:22\` command."
+            echo "To run a VM use \`clan vms run <machine> -p 2222:2222\` command."
+            echo "If you need to register system protected ports (ports below 1024) run the above command with \`sudo -E\`."
             echo ""
           '';
         };
