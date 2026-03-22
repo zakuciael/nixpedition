@@ -16,6 +16,7 @@
       <virtualisation/podman>
       <services/openssh>
       <services/frp>
+      <services/reverse-proxy>
     ];
 
     _.to-users.includes = [
