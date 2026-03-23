@@ -47,7 +47,7 @@
     };
     import-tree.url = "github:vic/import-tree";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
+    nixpkgs.url = "https://channels.nixos.org/nixos-25.11/nixexprs.tar.xz";
     nixpkgs-lib.follows = "nixpkgs";
   };
 
