@@ -85,6 +85,9 @@ in
         };
       };
 
+      # Networking options
+      networking.firewall.enable = true;
+
       # Default packages
       environment.systemPackages = with pkgs; [
         curl
