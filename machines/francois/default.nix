@@ -13,14 +13,17 @@
   den.aspects.francois = {
     includes = [
       <virtualisation/containers>
+      <virtualisation/podman>
       <services/openssh>
       <services/frp>
     ];
 
-    nixos = {
-      clan.core.sops.defaultGroups = [
-        "francois"
-      ];
-    };
+    _.to-users.includes = [
+      <virtualisation/podman>
+    ];
+
+    nixos.clan.core.sops.defaultGroups = [
+      "francois"
+    ];
   };
 }
