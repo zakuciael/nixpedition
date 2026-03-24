@@ -12,6 +12,7 @@
 
   den.aspects.francois = {
     includes = [
+      <virtualisation/containers>
       <services/openssh>
       <services/frp>
     ];
