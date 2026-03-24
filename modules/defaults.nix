@@ -6,18 +6,23 @@
   ...
 }:
 let
-  inherit (den.lib) parametric;
   inherit (lib) mkDefault getExe;
+  inherit (den.lib) perHost;
 in
 {
-  den.ctx.host.includes = [
-    (
-      { host }:
-      {
-        nixos.clan.core.networking.targetHost = host.hostName;
-      }
-    )
-  ];
+  # Automatically set clan's target host to the machine's hostname
+  den.ctx.host.includes =
+    let
+      clanTargetHost = perHost (
+        { host }:
+        {
+          nixos.clan.core.networking.targetHost = host.hostName;
+        }
+      );
+    in
+    [
+      clanTargetHost
+    ];
 
   # Default Home-Manager settings
   den.default.homeManager =
@@ -41,23 +46,13 @@ in
 
   # Default includes for all hosts
   den.default.includes = [
+    <den/hostname>
+    <den/mutual-provider>
+    <den/define-user>
+
     # Provide flake-parts inputs' and self' arguments to modules
     den._.inputs'
     den._.self'
-
-    # This aspect wires bidirectional providers between hosts and users automatically
-    (
-      let
-        mutual = from: to: den.aspects.${from.aspect}._.${to.aspect} or { };
-      in
-      { host, user, ... }@ctx:
-      parametric.fixedTo ctx {
-        includes = [
-          (mutual user host)
-          (mutual host user)
-        ];
-      }
-    )
   ];
 
   # Default host config
