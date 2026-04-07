@@ -12,14 +12,22 @@
 
   den.aspects.francois = {
     includes = [
+      <virtualisation/nixos-containers>
       <services/openssh>
       <services/frp>
     ];
 
-    nixos = {
-      clan.core.sops.defaultGroups = [
-        "francois"
-      ];
-    };
+    nixos =
+      { constants, ... }:
+      {
+        clan.core.sops.defaultGroups = [
+          "francois"
+        ];
+
+        nixos-containers = {
+          hostAddress = constants.containers.hostAddress;
+          hostAddress6 = constants.containers.hostAddress6;
+        };
+      };
   };
 }
