@@ -49,6 +49,7 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     nixpkgs.url = "https://channels.nixos.org/nixos-25.11/nixexprs.tar.xz";
     nixpkgs-lib.follows = "nixpkgs";
+    pkgs-by-name-for-flake-parts.url = "github:drupol/pkgs-by-name-for-flake-parts";
   };
 
 }
