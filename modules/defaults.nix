@@ -49,10 +49,6 @@ in
     <den/hostname>
     <den/mutual-provider>
     <den/define-user>
-
-    # Provide flake-parts inputs' and self' arguments to modules
-    den._.inputs'
-    den._.self'
   ];
 
   # Default host config

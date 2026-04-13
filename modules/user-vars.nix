@@ -2,7 +2,7 @@
 let
   inherit (den.lib) perUser;
 
-  user-password-secrets = perUser (
+  user-password-secrets =
     { user, ... }:
     {
       nixos =
@@ -40,12 +40,11 @@ let
             ];
           };
         };
-    }
-  );
+    };
 in
 {
   den.ctx.user.includes = [
-    user-password-secrets
+    (perUser user-password-secrets)
   ];
 
   den.ctx.host.includes = [

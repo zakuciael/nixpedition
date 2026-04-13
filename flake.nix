@@ -22,7 +22,7 @@
       };
       url = "github:zakuciael/clan-core";
     };
-    den.url = "github:vic/den?rev=ece9f9ec1647e82c96e4c21bb9c7060678e21d43";
+    den.url = "github:vic/den/v0.16.0";
     files.url = "github:mightyiam/files";
     flake-aspects.url = "github:vic/flake-aspects/v0.7.0";
     flake-compat = {
