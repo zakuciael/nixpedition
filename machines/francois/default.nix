@@ -17,6 +17,7 @@
       <services/openssh>
       <services/frp>
       <services/reverse-proxy>
+      <services/terranix>
     ];
 
     _.to-users.includes = [

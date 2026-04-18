@@ -14,7 +14,9 @@
           "nixpkgs"
         ],
         "sops-nix": "sops-nix",
-        "systems": "systems",
+        "systems": [
+          "systems"
+        ],
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
@@ -368,7 +370,9 @@
         "nixpkgs-lib": [
           "nixpkgs"
         ],
-        "pkgs-by-name-for-flake-parts": "pkgs-by-name-for-flake-parts"
+        "pkgs-by-name-for-flake-parts": "pkgs-by-name-for-flake-parts",
+        "systems": "systems",
+        "terranix": "terranix"
       }
     },
     "sops-nix": {
@@ -404,6 +408,32 @@
       "original": {
         "owner": "nix-systems",
         "repo": "default",
+        "type": "github"
+      }
+    },
+    "terranix": {
+      "inputs": {
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "systems": [
+          "systems"
+        ]
+      },
+      "locked": {
+        "lastModified": 1773700838,
+        "narHash": "sha256-6KFxpxyXjcqhOexc7ZeaXVWdDtGb6zO8HtjBEci9DfU=",
+        "owner": "terranix",
+        "repo": "terranix",
+        "rev": "306ce146bf0324dc3b3c45c095036b6f0e26bf35",
+        "type": "github"
+      },
+      "original": {
+        "owner": "terranix",
+        "repo": "terranix",
         "type": "github"
       }
     },
