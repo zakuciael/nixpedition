@@ -18,11 +18,11 @@
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
-        "lastModified": 1772919640,
-        "narHash": "sha256-4GFsYQyoLmmEM3qFHjvneWKvePnHSc/k3guFHa92Iqk=",
+        "lastModified": 1777816587,
+        "narHash": "sha256-IZZf8l1gImnmzd9N5TyqhGsMm2RySw0Tl6Ji1++ZUyQ=",
         "owner": "zakuciael",
         "repo": "clan-core",
-        "rev": "b5be76b907d0024f3a977c735c4e9eddc543506b",
+        "rev": "760530422e0d033604631a4d6979320004b03709",
         "type": "github"
       },
       "original": {
