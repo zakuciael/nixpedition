@@ -36,7 +36,7 @@ in
   disabledModules = [
     # Fixes a conflict with `clan` in which both try to generate the `nixosConfigurations` option.
     # Might not be future-proof tho...
-    "${inputs.den}/modules/config.nix"
+    "${inputs.den}/modules/outputs.nix"
   ];
 
   imports = [
@@ -55,7 +55,7 @@ in
 
   config = {
     flake-file.inputs = {
-      den.url = "github:vic/den?rev=ece9f9ec1647e82c96e4c21bb9c7060678e21d43";
+      den.url = "github:vic/den/v0.16.0";
       flake-aspects.url = "github:vic/flake-aspects/v0.7.0";
     };
 
