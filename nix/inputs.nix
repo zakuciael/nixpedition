@@ -5,5 +5,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware";
+
+    # Dedupe inputs
+    systems.url = "github:nix-systems/default";
   };
 }
