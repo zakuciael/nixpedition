@@ -18,6 +18,7 @@
       <services/frp>
       <services/reverse-proxy>
       <services/terranix>
+      <services/zitadel>
     ];
 
     _.to-users.includes = [
