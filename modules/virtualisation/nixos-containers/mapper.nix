@@ -1,5 +1,5 @@
 {
-  virtualisation.nixos-containers.provides.mapper.nixos =
+  virtualisation.nixos-containers.mapper.nixos =
     {
       config,
       lib,

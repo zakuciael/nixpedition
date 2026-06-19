@@ -32,9 +32,11 @@ in
     flake-file.inputs = {
       clan-core = {
         url = "github:zakuciael/clan-core";
-        inputs.nixpkgs.follows = "nixpkgs";
-        inputs.flake-parts.follows = "flake-parts";
-        inputs.systems.follows = "systems";
+        inputs = {
+          nixpkgs.follows = "nixpkgs";
+          flake-parts.follows = "flake-parts";
+          systems.follows = "systems";
+        };
       };
     };
 
