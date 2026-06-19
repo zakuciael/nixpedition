@@ -1,13 +1,22 @@
-{ den, ... }:
-let
-  inherit (den.lib)
-    parametric
-    perHost
-    perUser
-    ;
+{
+  # deadnix: skip
+  __findFile ? __findFile,
+  ...
+}:
+{
+  virtualisation.podman = {
+    includes = [
+      <virtualisation/podman/user-groups>
+    ];
 
-  # Configure podman and set it as OCI containers backend
-  configurePodman = perHost {
+    user-groups =
+      { user, ... }:
+      {
+        nixos.users.users."${user.userName}" = {
+          extraGroups = [ "podman" ];
+        };
+      };
+
     nixos =
       { config, pkgs, ... }:
       {
@@ -47,25 +56,5 @@ let
           podman-tui
         ];
       };
-  };
-
-  # Add all users to the "podman" group
-  addUserToGroup = perUser (
-    { user, ... }:
-    {
-      nixos = {
-        users.users."${user.userName}" = {
-          extraGroups = [ "podman" ];
-        };
-      };
-    }
-  );
-in
-{
-  virtualisation.podman = parametric {
-    includes = [
-      configurePodman
-      addUserToGroup
-    ];
   };
 }

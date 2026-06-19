@@ -1,44 +1,9 @@
 {
-  lib,
-  config,
   inputs,
   den,
   ...
 }:
-let
-  build =
-    builder: cfg:
-    cfg
-    |> lib.attrValues
-    |> map lib.attrValues
-    |> lib.flatten
-    |> map (item: {
-      inherit (item) name;
-      value = builder item;
-    })
-    |> lib.listToAttrs;
-
-  osConfiguration = host: {
-    imports = [
-      host.mainModule
-      { nixpkgs.hostPlatform = lib.mkDefault host.system; }
-    ];
-  };
-
-  homeConfiguration =
-    home:
-    home.instantiate {
-      pkgs = home.pkgs;
-      modules = [ home.mainModule ];
-    };
-in
 {
-  disabledModules = [
-    # Fixes a conflict with `clan` in which both try to generate the `nixosConfigurations` option.
-    # Might not be future-proof tho...
-    "${inputs.den}/modules/outputs.nix"
-  ];
-
   imports = [
     inputs.den.flakeModule
 
@@ -46,26 +11,23 @@ in
     (inputs.import-tree.matchNot ".*/(disko|configuration|hardware-configuration)\.nix" ../machines)
   ];
 
-  options = {
-    flake.test = lib.mkOption {
-      type = lib.types.raw;
-      default = { };
-    };
+  flake-file.inputs = {
+    den.url = "github:vic/den/v0.17.0";
+    flake-aspects.url = "github:vic/flake-aspects/v0.7.0";
   };
 
-  config = {
-    flake-file.inputs = {
-      den.url = "github:vic/den/v0.16.0";
-      flake-aspects.url = "github:vic/flake-aspects/v0.7.0";
+  # Modify how hosts are instantiated so that it desn't collide with clan
+  den.schema.host =
+    { host, ... }:
+    {
+      instantiate = args: { imports = args.modules; };
+      intoAttr = [
+        "clan"
+        "machines"
+        host.name
+      ];
     };
 
-    # Enable the angle-brackets support
-    _module.args.__findFile = den.lib.__findFile;
-
-    # Integrate den's host configurations with clan
-    flake.clan.machines = build osConfiguration config.den.hosts;
-
-    # Generate home-manager standalone configurations from den's homes.
-    flake.homeConfigurations = build homeConfiguration config.den.homes;
-  };
+  # Enable the angle-brackets support
+  _module.args.__findFile = den.lib.__findFile;
 }

@@ -34,7 +34,7 @@
               builtins.toJSON {
                 initrd = "${vmConfig.system.build.initialRamdisk}/${vmConfig.system.boot.loader.initrdFile}";
                 toplevel = vmConfig.system.build.toplevel;
-                regInfo = (pkgs.closureInfo { rootPaths = vmConfig.virtualisation.additionalPaths; });
+                regInfo = pkgs.closureInfo { rootPaths = vmConfig.virtualisation.additionalPaths; };
                 inherit (config.clan.virtualisation)
                   memorySize
                   cores
