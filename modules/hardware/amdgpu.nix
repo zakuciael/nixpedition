@@ -1,17 +1,14 @@
 { inputs, ... }:
+let
+  inherit (inputs.nixos-hardware.nixosModules) common-gpu-amd-sea-islands common-gpu-amd;
+in
 {
   hardware.amdgpu = {
     # Support for Sea Islands cards
-    provides.sea-islands.nixos = {
-      imports = with inputs.nixos-hardware.nixosModules; [
-        common-gpu-amd-sea-islands
-      ];
-    };
+    sea-islands.nixos.imports = [ common-gpu-amd-sea-islands ];
 
     nixos = {
-      imports = with inputs.nixos-hardware.nixosModules; [
-        common-gpu-amd
-      ];
+      imports = [ common-gpu-amd ];
 
       # Use amdgpu instead of radeon
       services.xserver.videoDrivers = [ "amdgpu" ];

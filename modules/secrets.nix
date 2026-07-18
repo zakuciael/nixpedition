@@ -12,11 +12,9 @@
     ];
   };
 
-  den.default.nixos = {
-    clan.core.sops.defaultGroups = [
-      "admins"
-    ];
-  };
+  den.default.nixos.clan.core.sops.defaultGroups = [
+    "admins"
+  ];
 
   # Add YubiKey age plugin to the devshell
   perSystem =

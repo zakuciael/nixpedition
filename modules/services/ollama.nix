@@ -9,17 +9,13 @@
       (<den/unfree> [ "open-webui" ])
     ];
 
-    provides.vulkan.nixos = {
+    vulkan.nixos = {
       services.ollama.acceleration = "vulkan";
     };
 
-    nixos = {
-      services = {
-        open-webui.enable = true;
-        ollama = {
-          enable = true;
-        };
-      };
+    nixos.services = {
+      open-webui.enable = true;
+      ollama.enable = true;
     };
   };
 }
