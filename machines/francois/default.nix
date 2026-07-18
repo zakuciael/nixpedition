@@ -18,6 +18,7 @@
       <services/frp>
       <services/reverse-proxy>
       <services/terranix>
+      <services/terranix/providers/cloudflare>
     ];
 
     _.to-users.includes = [
