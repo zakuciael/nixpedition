@@ -9,5 +9,9 @@
 
     # Dedupe inputs
     systems.url = "github:nix-systems/default";
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix/db94781";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 }
