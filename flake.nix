@@ -47,6 +47,10 @@
       url = "github:nix-community/home-manager/release-25.11";
     };
     import-tree.url = "github:vic/import-tree";
+    niks3 = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:Mic92/niks3";
+    };
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     nixpkgs.url = "https://channels.nixos.org/nixos-25.11/nixexprs.tar.xz";
     nixpkgs-lib.follows = "nixpkgs";

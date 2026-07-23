@@ -6,6 +6,13 @@
         hostAddress = "10.0.0.1";
         hostAddress6 = "fc00::1";
       };
+
+      services = {
+        binary-cache = {
+          port = 5751;
+          domain = "cache.zakku.eu";
+        };
+      };
     };
   };
 }
