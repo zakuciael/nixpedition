@@ -1,5 +1,5 @@
 {
-  virtualisation.nixos-containers.provides.options.nixos =
+  virtualisation.nixos-containers.options.nixos =
     { lib, ... }:
     let
       inherit (lib)

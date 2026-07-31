@@ -14,21 +14,19 @@
         runtimeInputs = [ pkgs.coreutils ];
       };
 
-      services = {
-        frp = {
-          enable = true;
-          settings = {
-            bindPort = 7000;
-            auth = {
-              method = "token";
-              tokenSource = {
-                type = "file";
-                file.path = "{{ .Envs.CREDENTIALS_DIRECTORY }}/frp-auth-token";
-              };
+      services.frp = {
+        enable = true;
+        settings = {
+          bindPort = 7000;
+          auth = {
+            method = "token";
+            tokenSource = {
+              type = "file";
+              file.path = "{{ .Envs.CREDENTIALS_DIRECTORY }}/frp-auth-token";
             };
           };
-          role = "server";
         };
+        role = "server";
       };
 
       systemd.services."frp".serviceConfig = {
