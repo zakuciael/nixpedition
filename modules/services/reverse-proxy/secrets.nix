@@ -1,5 +1,5 @@
 {
-  services.reverse-proxy.secrets.nixos =
+  services.reverse-proxy.nixos =
     { config, ... }:
     {
       clan.core.vars.generators = {
