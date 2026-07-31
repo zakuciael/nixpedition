@@ -84,6 +84,11 @@
       virtualisation.vmVariant = {
         networking.firewall.allowedTCPPorts = [ 8080 ];
 
+        # Add Let's Encrypt Staging Root CAs to the system's trusted certificates.
+        security.pki.certificateFiles = [
+          "${pkgs.letsencrypt-staging-cacert}/etc/ssl/certs/ca-bundle.pem"
+        ];
+
         services.traefik.staticConfigOptions = {
           api.insecure = true;
           log.level = "TRACE";
