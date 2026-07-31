@@ -14,8 +14,6 @@
       <hardware/amdgpu>
       <hardware/amdgpu/sea-islands>
       <services/openssh>
-      <services/ollama>
-      <services/ollama/vulkan>
     ];
   };
 }
