@@ -19,6 +19,7 @@
       <services/reverse-proxy>
       <services/terranix>
       <services/terranix/providers/cloudflare>
+      <services/terranix/providers/public_ip>
     ];
 
     _.to-users.includes = [
