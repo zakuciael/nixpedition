@@ -54,6 +54,10 @@
       };
       url = "github:Mic92/niks3";
     };
+    nixbot = {
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      url = "github:Mic92/nixbot";
+    };
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     nixpkgs.url = "https://channels.nixos.org/nixos-25.11/nixexprs.tar.xz";
     nixpkgs-lib.follows = "nixpkgs";
