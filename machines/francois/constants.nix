@@ -12,6 +12,14 @@
           port = 5751;
           domain = "cache.zakku.eu";
         };
+        nixbot = {
+          port = 8010;
+          domain = "ci.zakku.eu";
+          github = {
+            appId = 4430921;
+            oauthId = "Iv23liJZTjKA89uNvkRT";
+          };
+        };
       };
     };
   };

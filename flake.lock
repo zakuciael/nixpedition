@@ -318,6 +318,27 @@
         "url": "https://git.clan.lol/clan/nix-select/archive/main.tar.gz"
       }
     },
+    "nixbot": {
+      "inputs": {
+        "nixpkgs": "nixpkgs",
+        "treefmt-nix": [
+          "treefmt-nix"
+        ]
+      },
+      "locked": {
+        "lastModified": 1785237279,
+        "narHash": "sha256-FDAoJs/efW8k90tS/49s1FWla5yu5sY//04X9bkmGA0=",
+        "owner": "Mic92",
+        "repo": "nixbot",
+        "rev": "6764a0ef1c704b6db339f19d81cb5642a2508dff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Mic92",
+        "repo": "nixbot",
+        "type": "github"
+      }
+    },
     "nixos-facter-modules": {
       "locked": {
         "lastModified": 1766558141,
@@ -349,6 +370,23 @@
       }
     },
     "nixpkgs": {
+      "locked": {
+        "lastModified": 1785382966,
+        "narHash": "sha256-TzNPxZZV/qnV8U5fEtrvcMF/GppHnlWm16RDHddPOyE=",
+        "ref": "nixos-unstable-small",
+        "rev": "ba889d5db7c07eaf5cb8f37835d447d935c51b21",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/NixOS/nixpkgs"
+      },
+      "original": {
+        "ref": "nixos-unstable-small",
+        "shallow": true,
+        "type": "git",
+        "url": "https://github.com/NixOS/nixpkgs"
+      }
+    },
+    "nixpkgs_2": {
       "locked": {
         "lastModified": 1773964973,
         "narHash": "sha256-d2Q5VNbc91GloTZNByC4u3JS8Tj5BjfuOF19/vuJ/iM=",
@@ -389,8 +427,9 @@
         "home-manager": "home-manager",
         "import-tree": "import-tree",
         "niks3": "niks3",
+        "nixbot": "nixbot",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": "nixpkgs_2",
         "nixpkgs-lib": [
           "nixpkgs"
         ],

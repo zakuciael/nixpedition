@@ -1,5 +1,6 @@
 {
   lib,
+  den,
   # deadnix: skip
   __findFile ? __findFile,
   ...
@@ -13,6 +14,8 @@ in
       host.includes = [
         <den/mutual-provider>
         <den/define-user>
+        den.batteries.inputs'
+        den.batteries.self'
       ];
 
       # Enable Home-Manager as default for all users, unless they specify other classes.
