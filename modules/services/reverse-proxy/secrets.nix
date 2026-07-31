@@ -3,10 +3,10 @@
     { config, ... }:
     {
       clan.core.vars.generators = {
-        "cloudflare-api-token" = {
+        "traefik-cf-token" = {
           files."token".secret = true;
           prompts.token = {
-            description = "Your cloudflare API access token";
+            description = "Cloudflare API token for Traefik";
             type = "hidden";
             persist = true;
           };
@@ -14,7 +14,7 @@
       };
 
       sops.templates."traefik/envs".content = ''
-        CF_DNS_API_TOKEN=${config.sops.placeholder."vars/cloudflare-api-token/token"}
+        CF_DNS_API_TOKEN=${config.sops.placeholder."vars/traefik-cf-token/token"}
       '';
     };
 }
