@@ -14,6 +14,7 @@ in
       host.includes = [
         <den/mutual-provider>
         <den/define-user>
+        <virtualisation/nixos-containers>
         den.batteries.inputs'
         den.batteries.self'
       ];

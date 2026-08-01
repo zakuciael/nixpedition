@@ -12,7 +12,6 @@
 
   den.aspects.francois = {
     includes = [
-      <virtualisation/nixos-containers>
       <virtualisation/podman>
       <services/openssh>
       <services/frp>
