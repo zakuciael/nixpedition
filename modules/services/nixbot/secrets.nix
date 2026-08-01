@@ -48,7 +48,7 @@
           "ci-ssh-keys" = {
             kind = "Secret";
             data = {
-              privateKey = config.sops.placeholder."vars/ci-ssh-keys/private-key";
+              privateKey = config.sops.placeholder."vars/ci-ssh-keys/private-key-json";
               publicKey = config.clan.core.vars.generators.ci-ssh-keys.files.authorized-key.value;
             };
           };
