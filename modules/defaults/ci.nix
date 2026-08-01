@@ -21,6 +21,7 @@
           files = {
             "authorized-key".secret = false;
             "private-key".secret = true;
+            "private-key-json".secret = true;
           };
 
           runtimeInputs = [
@@ -30,6 +31,7 @@
           script = ''
             ssh-keygen -q -t ed25519 -N "" -C "" -f $out/private-key
             mv $out/private-key.pub $out/authorized-key
+            cat $out/private-key | sed 's/$/\\\n/g' | tr -d '\n' > $out/private-key-json
           '';
         };
         "ci-age-key" = {
