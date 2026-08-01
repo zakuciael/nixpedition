@@ -1,11 +1,11 @@
 {
-  services.nixbot.nixos =
+  services.nixbot.traefik =
     { host, ... }:
     let
       inherit (host.constants.services.nixbot) domain port;
     in
     {
-      services.traefik.dynamicConfigOptions.http = {
+      nixbot.http = {
         routers.nixbot = {
           rule = "Host(`${domain}`)";
           entryPoints = [

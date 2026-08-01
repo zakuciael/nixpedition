@@ -1,16 +1,31 @@
 {
-  # deadnix: skip
-  __findFile ? __findFile,
-  ...
-}:
-{
-  services.reverse-proxy.nixos =
+  den.quirks.traefik = {
+    description = "Traefik dynamic file declarations";
+  };
+
+  services.traefik.nixos =
     {
+      traefik,
       config,
       pkgs,
       lib,
       ...
     }:
+    let
+      inherit (lib)
+        mkDefault
+        optionalAttrs
+        mapAttrs'
+        foldl
+        recursiveUpdate
+        ;
+
+      dynamicFiles = traefik |> foldl (acc: val: recursiveUpdate acc val) { };
+      dynamicDir = "/var/lib/traefik/dynamic";
+
+      format = pkgs.formats.json { };
+      cfg = config.services.traefik;
+    in
     {
       networking.firewall.allowedTCPPorts = [
         80
@@ -19,6 +34,7 @@
 
       services.traefik = {
         enable = true;
+
         # Set the group to the currently enabled OCI Containers backend, so that the Docker/Podman integration works.
         group = config.virtualisation.oci-containers.backend;
         environmentFiles = [ config.sops.templates."traefik/envs".path ];
@@ -41,22 +57,28 @@
           };
 
           # Enable docker provider only if a OCI Container backend is enabled and it exposes an API socket.
-          providers =
-            lib.optionalAttrs
+          providers = {
+            file = {
+              directory = dynamicDir;
+              watch = true;
+            };
+          }
+          // (optionalAttrs
+            (
               (
-                (
-                  config.virtualisation.oci-containers.backend == "podman"
-                  && config.virtualisation.podman.dockerSocket.enable
-                )
-                || config.virtualisation.oci-containers.backend == "docker"
+                config.virtualisation.oci-containers.backend == "podman"
+                && config.virtualisation.podman.dockerSocket.enable
               )
-              {
-                docker = {
-                  endpoint = "unix:///var/run/docker.sock";
-                  watch = true;
-                  exposedByDefault = false;
-                };
+              || config.virtualisation.oci-containers.backend == "docker"
+            )
+            {
+              docker = {
+                endpoint = "unix:///var/run/docker.sock";
+                watch = true;
+                exposedByDefault = false;
               };
+            }
+          );
 
           global = {
             checkNewVersion = false;
@@ -64,7 +86,7 @@
           };
 
           log = {
-            level = lib.mkDefault "INFO";
+            level = mkDefault "INFO";
             format = "common";
           };
           accessLog.format = "common";
@@ -79,6 +101,35 @@
           };
         };
       };
+
+      systemd.tmpfiles.settings."traefik" = {
+        "${cfg.dataDir}".d = {
+          inherit (cfg) group;
+          user = "traefik";
+          mode = "0700";
+        };
+
+        "${dynamicDir}".d = {
+          inherit (cfg) group;
+          user = "traefik";
+          mode = "0700";
+        };
+        "${dynamicDir}/_nixos-*".r = { };
+      }
+      // (
+        dynamicFiles
+        |> mapAttrs' (
+          name: value: {
+            name = "${dynamicDir}/_nixos-${name}.yml";
+            value = {
+              "L+" = {
+                mode = "0444";
+                argument = toString (format.generate name value);
+              };
+            };
+          }
+        )
+      );
 
       # Custom traefik config when running inside a VM
       virtualisation.vmVariant = {
