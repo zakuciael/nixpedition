@@ -42,5 +42,28 @@
           };
         };
       };
+
+      sops.templates."nixbot-nixpedition-effects" = {
+        file = pkgs.writers.writeJSON "nixpedition-effects.json" {
+          "ci-ssh-keys" = {
+            kind = "Secret";
+            data = {
+              privateKey = config.sops.placeholder."vars/ci-ssh-keys/private-key";
+              publicKey = config.clan.core.vars.generators.ci-ssh-keys.files.authorized-key.value;
+            };
+          };
+          "ci-age-key" = {
+            kind = "Secret";
+            data = {
+              privateKey = config.sops.placeholder."vars/ci-age-key/private-key";
+              publicKey = config.clan.core.vars.generators.ci-age-key.files.public-key.value;
+            };
+          };
+        };
+      };
+
+      services.nixbot.effects.perRepoSecretFiles = {
+        "github:zakuciael/nixpedition" = config.sops.templates."nixbot-nixpedition-effects".path;
+      };
     };
 }
