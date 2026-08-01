@@ -42,6 +42,13 @@
       };
       url = "github:cachix/git-hooks.nix";
     };
+    hercules-ci-effects = {
+      inputs = {
+        flake-parts.follows = "flake-parts";
+        nixpkgs.follows = "nixpkgs";
+      };
+      url = "github:hercules-ci/hercules-ci-effects";
+    };
     home-manager = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/home-manager/release-25.11";

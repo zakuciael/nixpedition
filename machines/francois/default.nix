@@ -30,9 +30,12 @@
     nixos =
       { constants, ... }:
       {
-        clan.core.sops.defaultGroups = [
-          "francois"
-        ];
+        clan.core = {
+          sops.defaultGroups = [
+            "francois"
+          ];
+          networking.targetHost = "root@51.83.129.177:2222";
+        };
 
         nixos-containers = {
           hostAddress = constants.containers.hostAddress;

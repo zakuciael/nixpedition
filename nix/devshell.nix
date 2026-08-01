@@ -1,3 +1,4 @@
+{ inputs, lib, ... }:
 {
   perSystem =
     {
@@ -5,6 +6,50 @@
       pkgs,
       ...
     }:
+    let
+      inherit (pkgs) stdenv;
+      inherit (pkgs.python3Packages) buildPythonPackage hatchling httpx;
+
+      nixbot-effects = buildPythonPackage {
+        name = "nixbot-effects";
+        pyproject = true;
+        src = "${inputs.nixbot}/nixbot_effects";
+        build-system = [
+          hatchling
+        ];
+
+        # Dirty patch to fix local eval by adding `shallow=1` to the flake url
+        postPatch = /* bash */ ''
+          substituteInPlace ./nixbot_effects/eval.py \
+            --replace-fail 'return f"git+file://{opts.path}?rev={rev}#"' 'return f"git+file://{opts.path}?shallow=1&rev={rev}#"'
+        '';
+      };
+
+      nixbot-cli = buildPythonPackage {
+        name = "nixbot-cli";
+        pyproject = true;
+        src = "${inputs.nixbot}/nixbot_cli";
+        build-system = [ hatchling ];
+        dependencies = [
+          httpx
+          nixbot-effects
+        ];
+
+        # `nbo effects run` sandboxes the effect with bwrap. The sandbox only
+        # exists on Linux and bubblewrap does not evaluate on Darwin.
+        makeWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
+          "--prefix PATH : ${lib.makeBinPath [ pkgs.bubblewrap ]}"
+        ];
+
+        meta = {
+          description = "Command-line client (nbo) for the nixbot CI service";
+          homepage = "https://github.com/nix-community/nixbot";
+          license = lib.licenses.mit;
+          maintainers = [ lib.maintainers.mic92 ];
+          mainProgram = "nbo";
+        };
+      };
+    in
     {
       devShells = {
         default = pkgs.mkShell {
@@ -15,8 +60,12 @@
             config.clan.devShell or { }
           ];
           packages = with pkgs; [
+            statix
+            deadnix
             nixfmt
             nixd
+
+            nixbot-cli
           ];
 
           shellHook = ''

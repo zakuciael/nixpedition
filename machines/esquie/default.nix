@@ -14,6 +14,7 @@
       <hardware/amdgpu>
       <hardware/amdgpu/sea-islands>
       <services/openssh>
+      <clan/explicit-update>
     ];
   };
 }

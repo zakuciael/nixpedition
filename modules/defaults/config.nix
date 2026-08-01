@@ -37,7 +37,6 @@ in
             # Disable graphics for VMs (make it opt-in)
             virtualisation.graphics = mkDefault false;
             core = {
-              networking.targetHost = host.hostName;
               enableRecommendedDefaults = true;
               # Disable clan's `state-version` var
               settings.state-version.enable = false;
