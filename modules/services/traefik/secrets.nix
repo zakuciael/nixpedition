@@ -1,5 +1,5 @@
 {
-  services.reverse-proxy.nixos =
+  services.traefik.nixos =
     { config, ... }:
     {
       clan.core.vars.generators = {
