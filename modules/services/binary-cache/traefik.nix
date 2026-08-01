@@ -1,12 +1,12 @@
 {
-  services.binary-cache.nixos =
+  services.binary-cache.traefik =
     { host, config, ... }:
     let
       inherit (host.constants.services.binary-cache) domain;
       cfg = config.services.niks3;
     in
     {
-      services.traefik.dynamicConfigOptions.http = {
+      binary-cache.http = {
         routers = {
           binary-cache = {
             rule = "Host(`${domain}`) && !Path(`/`)";
