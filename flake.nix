@@ -1,7 +1,6 @@
 # DO-NOT-EDIT. This file was auto-generated using github:vic/flake-file.
 # Use `nix run .#write-flake` to regenerate it.
 {
-
   outputs =
     inputs:
     inputs.flake-parts.lib.mkFlake { inherit inputs; } {
@@ -16,72 +15,70 @@
 
   inputs = {
     clan-core = {
+      url = "github:zakuciael/clan-core";
       inputs = {
         flake-parts.follows = "flake-parts";
         nixpkgs.follows = "nixpkgs";
         systems.follows = "systems";
       };
-      url = "github:zakuciael/clan-core";
     };
     den.url = "github:vic/den/v0.17.0";
     files.url = "github:mightyiam/files";
     flake-aspects.url = "github:vic/flake-aspects/v0.7.0";
     flake-compat = {
-      flake = false;
       url = "github:NixOS/flake-compat";
+      flake = false;
     };
     flake-file.url = "github:vic/flake-file";
     flake-parts = {
-      inputs.nixpkgs-lib.follows = "nixpkgs-lib";
       url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs";
     };
     git-hooks-nix = {
+      url = "github:cachix/git-hooks.nix";
       inputs = {
         flake-compat.follows = "flake-compat";
         nixpkgs.follows = "nixpkgs";
       };
-      url = "github:cachix/git-hooks.nix";
     };
     hercules-ci-effects = {
+      url = "github:hercules-ci/hercules-ci-effects";
       inputs = {
         flake-parts.follows = "flake-parts";
         nixpkgs.follows = "nixpkgs";
       };
-      url = "github:hercules-ci/hercules-ci-effects";
     };
     home-manager = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/home-manager/release-25.11";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     import-tree.url = "github:vic/import-tree";
     niks3 = {
+      url = "github:Mic92/niks3";
       inputs = {
         nixpkgs.follows = "nixpkgs";
         treefmt-nix.follows = "treefmt-nix";
       };
-      url = "github:Mic92/niks3";
     };
     nixbot = {
-      inputs.treefmt-nix.follows = "treefmt-nix";
       url = "github:Mic92/nixbot";
+      inputs.treefmt-nix.follows = "treefmt-nix";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     nixpkgs.url = "https://channels.nixos.org/nixos-25.11/nixexprs.tar.xz";
-    nixpkgs-lib.follows = "nixpkgs";
     pkgs-by-name-for-flake-parts.url = "github:drupol/pkgs-by-name-for-flake-parts";
     systems.url = "github:nix-systems/default";
     terranix = {
+      url = "github:terranix/terranix";
       inputs = {
         flake-parts.follows = "flake-parts";
         nixpkgs.follows = "nixpkgs";
         systems.follows = "systems";
       };
-      url = "github:terranix/terranix";
     };
     treefmt-nix = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:numtide/treefmt-nix/db94781";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
 }
