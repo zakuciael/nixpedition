@@ -1,6 +1,10 @@
 {
   services.binary-cache.nixos =
-    { config, constants, ... }:
+    {
+      host,
+      config,
+      ...
+    }:
     let
       osConfig = config;
     in
@@ -28,7 +32,7 @@
             resource = {
               "cloudflare_dns_record"."binary-cache-dns" = {
                 zone_id = lib.tfRef "var.cloudflare_zone_id";
-                name = constants.services.binary-cache.domain;
+                name = host.constants.services.binary-cache.domain;
                 ttl = 1; # set to `1` when `proxied = true`
                 type = "A";
                 comment = "Nix binary cache (${osConfig.networking.hostName})";

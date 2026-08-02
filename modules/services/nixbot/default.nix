@@ -10,13 +10,18 @@
 
   services.nixbot.nixos =
     {
+      host,
       config,
       inputs',
-      constants,
       ...
     }:
     let
-      inherit (constants.services.nixbot) domain settings;
+      inherit (host.constants.services.nixbot)
+        domain
+        build
+        eval
+        github
+        ;
     in
     {
       imports = [ inputs.nixbot.nixosModules.nixbot ];
@@ -39,24 +44,24 @@
         # Disable nginx since it's enabled when using `useHTTPS` option
         nginx.enable = false;
 
-        buildSystems = settings.build.systems;
-        buildConcurrency = settings.build.concurrency;
+        buildSystems = build.systems;
+        buildConcurrency = build.concurrency;
 
-        evalWorkerCount = settings.eval.worker_count;
-        evalMaxMemorySize = settings.eval.memory_limit;
+        evalWorkerCount = eval.worker_count;
+        evalMaxMemorySize = eval.memory_limit;
 
         github = {
           enable = true;
 
           # GitHub App configuration.
-          appId = settings.github.appId;
+          appId = github.app_id;
           appSecretKeyFile =
             config.clan.core.vars.generators.nixbot-github-app-private-key.files.private_key.path;
 
           # The webhook secret configured in the GitHub App settings.
           webhookSecretFile = config.clan.core.vars.generators.nixbot-webhook-secret.files.secret.path;
           #  OAuth credentials for the login button (from the same GitHub App).
-          oauthId = settings.github.oauthId;
+          oauthId = github.oauth_id;
           oauthSecretFile = config.clan.core.vars.generators.nixbot-github-oauth-secret.files.secret.path;
 
           # All repositories with this topic will be built.
@@ -65,7 +70,7 @@
 
         niks3 = {
           enable = true;
-          serverUrl = "https://${constants.services.binary-cache.domain}";
+          serverUrl = "https://${host.constants.services.binary-cache.domain}";
           package = inputs'.niks3.packages.default;
 
           authTokenFile = config.clan.core.vars.generators.binary-cache-api-token.files.token.path;

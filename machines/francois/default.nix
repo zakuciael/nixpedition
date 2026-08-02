@@ -27,20 +27,16 @@
       <virtualisation/podman>
     ];
 
-    nixos =
-      { constants, ... }:
-      {
-        clan.core = {
-          sops.defaultGroups = [
-            "francois"
-          ];
-          networking.targetHost = "root@51.83.129.177:2222";
-        };
-
-        nixos-containers = {
-          hostAddress = constants.containers.hostAddress;
-          hostAddress6 = constants.containers.hostAddress6;
-        };
+    nixos = {
+      clan.core = {
+        sops.defaultGroups = [ "francois" ];
+        networking.targetHost = "root@51.83.129.177:2222";
       };
+
+      nixos-containers = {
+        hostAddress = "10.0.0.1";
+        hostAddress6 = "fc00::1";
+      };
+    };
   };
 }
