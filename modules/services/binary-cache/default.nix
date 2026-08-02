@@ -15,13 +15,13 @@
 
   services.binary-cache.nixos =
     {
+      host,
       config,
       lib,
-      constants,
       ...
     }:
     let
-      inherit (constants.services.binary-cache) domain port;
+      inherit (host.constants.services.binary-cache) domain port;
 
       terranixConfig = config.services.terranix;
       terraformConfig = terranixConfig.result.terraformConfig.passthru.config;
