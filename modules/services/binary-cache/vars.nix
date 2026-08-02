@@ -1,9 +1,9 @@
 {
   services.binary-cache.nixos =
     {
+      host,
       config,
       pkgs,
-      constants,
       ...
     }:
     let
@@ -11,6 +11,25 @@
     in
     {
       clan.core.vars.generators = {
+        "binary-cache-constants" = {
+          files = {
+            port.secret = false;
+            domain.secret = false;
+          };
+
+          prompts = {
+            port = {
+              description = "Port for the niks3 server";
+              persist = true;
+              type = "line";
+            };
+            domain = {
+              description = "Domain for the niks3 server";
+              persist = true;
+              type = "line";
+            };
+          };
+        };
         "binary-cache-api-token" = {
           files."token" = {
             secret = true;
@@ -38,7 +57,7 @@
 
           script = /* bash */ ''
             nix --extra-experimental-features "nix-command flakes" \
-              key generate-secret --key-name "${constants.services.binary-cache.domain}-1" > $out/key
+              key generate-secret --key-name "${host.constants.services.binary-cache.domain}-1" > $out/key
             nix --extra-experimental-features "nix-command flakes" \
               key convert-secret-to-public < $out/key > $out/key.pub
           '';
