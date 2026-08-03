@@ -17,9 +17,7 @@
       <services/frp>
       <services/traefik>
       <services/terranix>
-      <services/terranix/providers/cloudflare>
-      <services/terranix/providers/public_ip>
-      <services/binary-cache>
+      <services/niks3>
       <services/nixbot>
     ];
 

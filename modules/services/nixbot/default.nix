@@ -12,11 +12,15 @@
     {
       host,
       config,
+      lib,
       inputs',
       ...
     }:
     let
-      inherit (host.constants.services.nixbot)
+      inherit (lib) mkIf;
+
+      serviceCfgs = host.constants.services;
+      inherit (serviceCfgs.nixbot)
         domain
         build
         eval
@@ -68,13 +72,18 @@
           topic = "nixbot";
         };
 
-        niks3 = {
-          enable = true;
-          serverUrl = "https://${host.constants.services.binary-cache.domain}";
-          package = inputs'.niks3.packages.default;
-
-          authTokenFile = config.clan.core.vars.generators.binary-cache-api-token.files.token.path;
-        };
+        niks3 = mkIf config.services.niks3.enable (
+          let
+            inherit (serviceCfgs.niks3) domain;
+            cfg = config.services.niks3;
+          in
+          {
+            enable = true;
+            serverUrl = "https://${domain}";
+            package = inputs'.niks3.packages.default;
+            authTokenFile = cfg.apiTokenFile;
+          }
+        );
       };
     };
 }
