@@ -1,14 +1,15 @@
 { inputs, ... }:
 {
   imports = [
-    inputs.hercules-ci-effects.flakeModule
+    inputs.nixbot-effects.flakeModule
   ];
 
-  flake-file.inputs.hercules-ci-effects = {
-    url = "github:hercules-ci/hercules-ci-effects";
+  flake-file.inputs.nixbot-effects = {
+    url = "github:zakuciael/nixbot-effects";
     inputs = {
       nixpkgs.follows = "nixpkgs";
       flake-parts.follows = "flake-parts";
+      clan-core.follows = "clan-core";
     };
   };
 }

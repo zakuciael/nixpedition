@@ -46,13 +46,6 @@
         nixpkgs.follows = "nixpkgs";
       };
     };
-    hercules-ci-effects = {
-      url = "github:hercules-ci/hercules-ci-effects";
-      inputs = {
-        flake-parts.follows = "flake-parts";
-        nixpkgs.follows = "nixpkgs";
-      };
-    };
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -68,6 +61,14 @@
     nixbot = {
       url = "github:Mic92/nixbot";
       inputs.treefmt-nix.follows = "treefmt-nix";
+    };
+    nixbot-effects = {
+      url = "github:zakuciael/nixbot-effects";
+      inputs = {
+        clan-core.follows = "clan-core";
+        flake-parts.follows = "flake-parts";
+        nixpkgs.follows = "nixpkgs";
+      };
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     nixpkgs.url = "https://channels.nixos.org/nixos-25.11/nixexprs.tar.xz";

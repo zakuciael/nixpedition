@@ -1,58 +1,58 @@
 {
-  self,
-  config,
-  withSystem,
-  ...
-}:
-let
-  flakeConfig = config;
-in
-{
-  herculesCI =
-    { config, ... }:
+  hci-effects =
     {
-      onPush.default.outputs = {
-        effects.deploy = withSystem flakeConfig.defaultEffectSystem (
-          {
-            hci-effects,
-            pkgs,
-            inputs',
-            ...
-          }:
-          hci-effects.runIf (config.repo.branch == "main") (
-            hci-effects.mkEffect {
+      config,
+      hci-effects,
+      ...
+    }:
+    let
+      NIX_CONFIG = "experimental-features = nix-command flakes pipe-operators";
+    in
+    {
+      jobs = {
+        deploy = {
+          on.push = config.repo.branch == "main";
+
+          steps = {
+            default = hci-effects.mkEffect {
               name = "deploy";
               lock = "production";
 
-              inputs = [
-                inputs'.clan-core.packages.clan-cli
-                pkgs.openssh
-              ];
+              checkout = true;
 
-              src = self;
+              # Envs
+              inherit NIX_CONFIG;
 
+              # Secrets
               secretsMap = {
                 "ssh" = "ci-ssh-keys";
-                "age-key" = "ci-age-key";
+                "age" = "ci-age-key";
               };
 
-              userSetupScript = ''
-                # Read Age Key from `age-key` secret and write it to ~/.config/sops/age/keys.txt file
-                mkdir -p ~/.config/sops/age/
-                readSecretString "age-key" ".privateKey" > ~/.config/sops/age/keys.txt
+              # State
+              knownHostsName = "deploy.known_hosts";
 
-                # Read SSH key from `ssh` secret and write it to ~/.ssh directory
+              getStateScript = ''
+                mkdir -p ~/.ssh
+                getStateFile "$knownHostsName" ~/.ssh/known_hosts
+                touch ~/.ssh/known_hosts
+              '';
+              putStateScript = ''
+                putStateFile "$knownHostsName" ~/.ssh/known_hosts
+              '';
+
+              userSetupScript = /* bash */ ''
+                writeAgeKey
                 writeSSHKey
               '';
 
-              effectScript = ''
+              effectScript = /* bash */ ''
                 clan machines update \
-                  --option extra-experimental-features 'nix-command flakes pipe-operators' \
                   --host-key-check accept-new
               '';
-            }
-          )
-        );
+            };
+          };
+        };
       };
     };
 }
