@@ -1,8 +1,8 @@
 {
   services.binary-cache.nixos =
-    { config, constants, ... }:
+    { host, config, ... }:
     let
-      inherit (constants.services.binary-cache) domain;
+      inherit (host.constants.services.binary-cache) domain;
       cfg = config.services.niks3;
     in
     {

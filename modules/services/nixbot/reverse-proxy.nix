@@ -1,8 +1,8 @@
 {
   services.nixbot.nixos =
-    { constants, ... }:
+    { host, ... }:
     let
-      inherit (constants.services.nixbot) domain port;
+      inherit (host.constants.services.nixbot) domain port;
     in
     {
       services.traefik.dynamicConfigOptions.http = {
