@@ -19,3 +19,6 @@ result-*
 
 # Ignore `nbo` secret files
 secrets.json
+
+# Ignore terraform state
+terraform/
