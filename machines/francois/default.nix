@@ -15,7 +15,7 @@
       <virtualisation/podman>
       <services/openssh>
       <services/frp>
-      <services/reverse-proxy>
+      <services/traefik>
       <services/terranix>
       <services/terranix/providers/cloudflare>
       <services/terranix/providers/public_ip>
