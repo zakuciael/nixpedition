@@ -224,29 +224,6 @@
         "type": "github"
       }
     },
-    "hercules-ci-effects": {
-      "inputs": {
-        "flake-parts": [
-          "flake-parts"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1784091696,
-        "narHash": "sha256-4sTf6FyZLUG3UJ1VNAHBbUGvNoiIfpPaju6D7RsDQrY=",
-        "owner": "hercules-ci",
-        "repo": "hercules-ci-effects",
-        "rev": "41134a44913c4a32cdb03e5e82ac331af0ff3efc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "hercules-ci",
-        "repo": "hercules-ci-effects",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -362,6 +339,32 @@
         "type": "github"
       }
     },
+    "nixbot-effects": {
+      "inputs": {
+        "clan-core": [
+          "clan-core"
+        ],
+        "flake-parts": [
+          "flake-parts"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1786802580,
+        "narHash": "sha256-uA8uMgrJ9hejORB4wmJsq+zPDeB9FNUnH93xpCj5un0=",
+        "owner": "zakuciael",
+        "repo": "nixbot-effects",
+        "rev": "ba0e625ca484224faa511831424885993d29a185",
+        "type": "github"
+      },
+      "original": {
+        "owner": "zakuciael",
+        "repo": "nixbot-effects",
+        "type": "github"
+      }
+    },
     "nixos-facter-modules": {
       "locked": {
         "lastModified": 1766558141,
@@ -447,11 +450,11 @@
         "flake-file": "flake-file",
         "flake-parts": "flake-parts",
         "git-hooks-nix": "git-hooks-nix",
-        "hercules-ci-effects": "hercules-ci-effects",
         "home-manager": "home-manager",
         "import-tree": "import-tree",
         "niks3": "niks3",
         "nixbot": "nixbot",
+        "nixbot-effects": "nixbot-effects",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
         "pkgs-by-name-for-flake-parts": "pkgs-by-name-for-flake-parts",
