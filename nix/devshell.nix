@@ -68,6 +68,8 @@
             nixbot-cli
           ];
 
+          CLAN_NO_COMMIT = 1;
+
           shellHook = ''
             ${config.pre-commit.settings.shellHook}
 
