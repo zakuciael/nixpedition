@@ -1,6 +1,10 @@
 {
   services.frp.nixos =
-    { config, pkgs, ... }:
+    {
+      config,
+      pkgs,
+      ...
+    }:
     {
       clan.core.vars.generators."frp-auth-token" = {
         files."token" = {
@@ -14,7 +18,7 @@
         runtimeInputs = [ pkgs.coreutils ];
       };
 
-      services.frp = {
+      services.frp.instances."" = {
         enable = true;
         settings = {
           bindPort = 7000;
@@ -37,7 +41,7 @@
 
       networking.firewall = {
         allowedTCPPorts = [
-          config.services.frp.settings.bindPort
+          config.services.frp.instances."".settings.bindPort
           25565 # Minecraft server
           1500 # Piravet custom port
         ];

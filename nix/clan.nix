@@ -36,7 +36,13 @@ in
           nixpkgs.follows = "nixpkgs";
           flake-parts.follows = "flake-parts";
           systems.follows = "systems";
+          sops-nix.follows = "sops-nix";
         };
+      };
+
+      sops-nix = {
+        url = "github:Mic92/sops-nix";
+        inputs.nixpkgs.follows = "nixpkgs";
       };
     };
 
