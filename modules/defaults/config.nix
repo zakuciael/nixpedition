@@ -25,9 +25,12 @@ in
 
     default = {
       nixos =
-        { host, pkgs, ... }:
+        { pkgs, ... }:
         {
-          system.stateVersion = "25.11";
+          # Silence the `x86_64-darwin` deprecation warning.
+          nixpkgs.config.allowDeprecatedx86_64Darwin = true;
+
+          system.stateVersion = "26.05";
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
@@ -104,7 +107,7 @@ in
         {
           home = {
             shellAliases."vim" = "${getExe pkgs.neovim}";
-            stateVersion = "25.11";
+            stateVersion = "26.05";
           };
         };
     };

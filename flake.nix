@@ -24,6 +24,7 @@
       inputs = {
         flake-parts.follows = "flake-parts";
         nixpkgs.follows = "nixpkgs";
+        sops-nix.follows = "sops-nix";
         systems.follows = "systems";
       };
     };
@@ -47,7 +48,7 @@
       };
     };
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     import-tree.url = "github:vic/import-tree";
@@ -71,8 +72,12 @@
       };
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware";
-    nixpkgs.url = "https://channels.nixos.org/nixos-25.11/nixexprs.tar.xz";
+    nixpkgs.url = "https://channels.nixos.org/nixos-26.05/nixexprs.tar.zst";
     pkgs-by-name-for-flake-parts.url = "github:drupol/pkgs-by-name-for-flake-parts";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     systems.url = "github:nix-systems/default";
     terranix = {
       url = "github:terranix/terranix";
