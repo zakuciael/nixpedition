@@ -3,13 +3,13 @@
     { host, ... }:
     {
       global =
-        { lib, ... }:
+        { lib, utils, ... }:
         let
           inherit (host.constants.services.nixbot) domain;
         in
         {
           resource."cloudflare_dns_record"."nixbot" = {
-            zone_id = lib.tf.ref "var.cf-zone-id";
+            zone_id = utils.mkCfZoneIdRefBySubdomain domain;
             name = domain;
             type = "A";
             proxied = true;

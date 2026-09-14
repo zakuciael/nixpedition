@@ -10,12 +10,18 @@
             ...
           }:
           let
-            account_id = lib.tf.ref "var.cf-account-id";
-            zone_id = lib.tf.ref "var.cf-zone-id";
-
             inherit (host.constants.services.niks3) domain s3;
+
+            account_id = lib.tf.ref "var.cf-account-id";
+            zone_id = utils.mkCfZoneIdRefBySubdomain domain;
           in
           {
+            data.cloudflare_zones.zones = {
+              account.id = account_id;
+              order = "name";
+              status = "active";
+            };
+
             resource = {
               cloudflare_dns_record."niks3" = {
                 inherit zone_id;
