@@ -55,6 +55,7 @@
               secretsMap = {
                 "ssh" = "ci-ssh-keys";
                 "age" = "ci-age-key";
+                "git-author" = "git-author";
               };
 
               # State
@@ -72,11 +73,7 @@
               userSetupScript = /* bash */ ''
                 writeAgeKey
                 writeSSHKey
-
-                # Configure git commit author
-                git config --global user.name "$(readSecretString "git-author" .username)"
-                git config --global user.email "$(readSecretString "git-author" .email)"
-                git config --global safe.directory '*'
+                setupGit
               '';
 
               effectScript = /* bash */ ''
