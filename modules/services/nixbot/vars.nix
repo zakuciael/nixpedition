@@ -136,24 +136,22 @@
                 publicKey = config.clan.core.vars.generators.ci-age-key.files.public-key.value;
               };
             };
+            "git-author" =
+              let
+                username = config.clan.core.vars.generators.nixbot-constants.files."github.app_user_name".value;
+                app_id = config.clan.core.vars.generators.nixbot-constants.files."github.app_user_id".value;
+              in
+              {
+                kind = "Secret";
+                data = {
+                  inherit username;
+                  email = "${app_id}+${username}@users.noreply.github.com";
+                };
+              };
           };
 
       services.nixbot.effects.perRepoSecretFiles = {
         "github:zakuciael/nixpedition" = config.sops.templates."nixbot-nixpedition-effects".path;
-        "github:zakuciael/*" =
-          let
-            username = config.clan.core.vars.generators.nixbot-constants.files."github.app_user_name".value;
-            app_id = config.clan.core.vars.generators.nixbot-constants.files."github.app_user_id".value;
-          in
-          pkgs.writers.writeJSON "zakuciael-effects.json" {
-            "git-author" = {
-              kind = "Secret";
-              data = {
-                inherit username;
-                email = "${app_id}+${username}@users.noreply.github.com";
-              };
-            };
-          };
       };
     };
 }
