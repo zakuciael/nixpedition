@@ -9,7 +9,6 @@
     inputs = {
       nixpkgs.follows = "nixpkgs";
       flake-parts.follows = "flake-parts";
-      clan-core.follows = "clan-core";
     };
   };
 }
