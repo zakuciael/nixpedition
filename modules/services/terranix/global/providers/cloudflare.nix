@@ -4,7 +4,10 @@
     {
       secrets."cf-api-token" = { };
 
-      terraform.required_providers.cloudflare.source = "cloudflare/cloudflare";
+      terraform.required_providers.cloudflare = {
+        source = "cloudflare/cloudflare";
+        version = "5.25.0";
+      };
 
       provider."cloudflare".api_token = utils.readSecret "cf-api-token";
 

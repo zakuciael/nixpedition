@@ -8,7 +8,10 @@
         "ovh-francois-service-name" = { };
       };
 
-      terraform.required_providers.ovh.source = "ovh/ovh";
+      terraform.required_providers.ovh = {
+        source = "ovh/ovh";
+        version = "2.22.0";
+      };
 
       provider."ovh" = {
         endpoint = "ovh-eu";
