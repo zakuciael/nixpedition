@@ -66,7 +66,6 @@
     nixbot-effects = {
       url = "github:zakuciael/nixbot-effects";
       inputs = {
-        clan-core.follows = "clan-core";
         flake-parts.follows = "flake-parts";
         nixpkgs.follows = "nixpkgs";
       };
