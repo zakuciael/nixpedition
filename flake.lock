@@ -397,11 +397,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1791150327,
-        "narHash": "sha256-GuYCE6prQiVX0hCL6faJuTZCjhqX12gP2qugkPxq55E=",
+        "lastModified": 1791155758,
+        "narHash": "sha256-AywNm/o2//utsoP3GyMY/DYV4Y1QuXvujHeHNDp7OBU=",
         "owner": "zakuciael",
         "repo": "nixbot-effects",
-        "rev": "015ac6059c5d1f6e02ee06579f50bad773454d8c",
+        "rev": "dd1b1e386cb7e88356b841fcc8318d98b5ae2928",
         "type": "github"
       },
       "original": {
