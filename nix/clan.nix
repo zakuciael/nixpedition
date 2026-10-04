@@ -55,12 +55,12 @@ in
       {
         config,
         pkgs,
-        inputs',
+        system,
         ...
       }:
       {
         clan = {
-          devShellPackages = [ inputs'.clan-core.packages.clan-cli ];
+          devShellPackages = [ inputs.clan-core.packages.${system}.clan-cli ];
           devShell = pkgs.mkShell {
             packages = config.clan.devShellPackages;
           };

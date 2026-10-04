@@ -1,4 +1,4 @@
-{
+{ inputs, ... }: {
   hci-effects =
     {
       lib,
@@ -6,6 +6,7 @@
       hci-effects,
       pkgs,
       inputs',
+      system,
       ...
     }:
     let
@@ -39,7 +40,7 @@
 
             checkout = true;
             inputs = [
-              inputs'.clan-core.packages.clan-cli
+              inputs.clan-core.packages.${system}.clan-cli
               terraformScript
 
               pkgs.openssh

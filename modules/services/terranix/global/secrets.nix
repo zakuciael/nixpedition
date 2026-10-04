@@ -64,14 +64,18 @@
     };
 
   perSystem =
-    { inputs', pkgs, ... }:
+    {
+      system,
+      pkgs,
+      ...
+    }:
     let
       lib' = pkgs.lib.extend (import "${inputs.terranix}/core/helpers.nix" pkgs);
     in
     {
       terranix.terranixConfigurations.nixpedition = {
         workdir = "terraform/nixpedition";
-        terraformWrapper.extraRuntimeInputs = [ inputs'.clan-core.packages.default ];
+        terraformWrapper.extraRuntimeInputs = [ inputs.clan-core.packages.${system}.clan-cli ];
         extraArgs = {
           utils = {
             readSecret = name: "\${data.external.${name}.result.secret}";
