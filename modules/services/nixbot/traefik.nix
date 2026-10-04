@@ -12,14 +12,8 @@
             "http"
             "https"
           ];
-          middlewares = [ "nixbot" ];
           tls.certResolver = "cloudflare";
           service = "nixbot";
-        };
-
-        middlewares.nixbot.buffering = {
-          maxRequestBodyBytes = 26214400; # 25m in bytes, request-side only
-          memRequestBodyBytes = 2097152; # buffer in memory up to 2MB before spilling to disk
         };
 
         serversTransports.nixbot = {
