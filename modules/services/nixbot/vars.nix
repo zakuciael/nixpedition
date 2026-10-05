@@ -117,6 +117,21 @@
             persist = true;
           };
         };
+        "nixbot-access-tokens" = {
+          files."nix.conf" = {
+            secret = true;
+            group = "nixbot";
+            mode = "0440";
+          };
+          prompts."tokens" = {
+            description = "nix access-tokens for private flake inputs (host=token …)";
+            type = "hidden";
+            persist = true;
+          };
+          script = /* bash */ ''
+            echo "access-tokens = $(cat "$prompts/tokens")" > "$out/nix.conf"
+          '';
+        };
       };
 
       sops.templates."nixbot-nixpedition-effects".file =

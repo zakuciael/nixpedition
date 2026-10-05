@@ -30,7 +30,16 @@
     {
       imports = [ inputs.nixbot.nixosModules.nixbot ];
 
-      nix.settings.trusted-users = [ "nixbot" ];
+      nix = {
+        settings.trusted-users = [ "nixbot" ];
+        # Readable by the nixbot user; survives prefetch's NIX_CONFIG override
+        # of netrc-file (access-tokens stay from the system nix.conf).
+        extraOptions = ''
+          !include ${
+            config.clan.core.vars.generators.nixbot-access-tokens.files."nix.conf".path
+          }
+        '';
+      };
 
       services.nixbot = {
         enable = true;
