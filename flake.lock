@@ -367,7 +367,9 @@
     },
     "nixbot": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
         "treefmt-nix": [
           "treefmt-nix"
         ]
@@ -442,23 +444,6 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1786301960,
-        "narHash": "sha256-EC1Vjo2Htw0urpDTWryYwQvxd+1AlnuXZ4opRK27o1Y=",
-        "ref": "nixos-unstable-small",
-        "rev": "1d383cbb23927d10d1b67d1cef2b653024ebc171",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/NixOS/nixpkgs"
-      },
-      "original": {
-        "ref": "nixos-unstable-small",
-        "shallow": true,
-        "type": "git",
-        "url": "https://github.com/NixOS/nixpkgs"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
         "lastModified": 1788405554,
         "narHash": "sha256-z3ACU3NTAstjK+JNjW0zmIH2Q0GYo2pgGfJddesv7Xo=",
         "rev": "a5cc6f2c37bf518436dc8d1c288ccd0c43c2f4c4",
@@ -501,7 +486,7 @@
         "nixbot": "nixbot",
         "nixbot-effects": "nixbot-effects",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "pkgs-by-name-for-flake-parts": "pkgs-by-name-for-flake-parts",
         "sops-nix": "sops-nix",
         "systems": "systems",

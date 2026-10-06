@@ -3,7 +3,7 @@
   flake-file.inputs.nixbot = {
     url = "github:Mic92/nixbot";
     inputs = {
-      # nixpkgs.follows = "nixpkgs";
+      nixpkgs.follows = "nixpkgs";
       treefmt-nix.follows = "treefmt-nix";
     };
   };

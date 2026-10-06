@@ -61,7 +61,10 @@
     };
     nixbot = {
       url = "github:Mic92/nixbot";
-      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        treefmt-nix.follows = "treefmt-nix";
+      };
     };
     nixbot-effects = {
       url = "github:zakuciael/nixbot-effects";
