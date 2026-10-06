@@ -28,11 +28,13 @@
         github
         ;
 
-      # Expose `.nix` the way Mic92's package does so the unit puts
-      # Determinate's nix CLI ahead of PATH.
+      # DetSys nej for eval; nixpkgs nix for the CLI nixbot puts on PATH.
+      # Determinate Nix breaks `nix flake archive --dry-run` on unlocked
+      # worktrees ("cannot compute store path for unlocked input"), which
+      # nixbot uses to GC-root flake inputs after prefetch.
       determinate-nix-eval-jobs = pkgs.determinate-nix-eval-jobs.overrideAttrs (old: {
         passthru = (old.passthru or { }) // {
-          nix = config.nix.package;
+          nix = pkgs.nixVersions.latest;
         };
       });
     in
