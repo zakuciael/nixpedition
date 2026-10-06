@@ -36,8 +36,6 @@
       nix.settings = {
         max-jobs = 4;
         cores = 2;
-        download-buffer-size = 268435456; # 256 MiB
-        http-connections = 50;
       };
 
       nixos-containers = {

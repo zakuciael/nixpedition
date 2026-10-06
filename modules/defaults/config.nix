@@ -80,6 +80,9 @@ in
               auto-optimise-store = true;
               trusted-users = [ "@wheel" ];
 
+              download-buffer-size = 268435456; # 256 MiB
+              http-connections = 50;
+
               min-free = 15 * 1024 * 1024 * 1024; # 15 GiB
               max-free = 40 * 1024 * 1024 * 1024; # 40 GiB
             };
