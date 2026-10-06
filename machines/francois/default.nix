@@ -31,6 +31,15 @@
         networking.targetHost = "root@51.83.129.177:2222";
       };
 
+      # 8 vCPU / 22 GiB, parallelize attrs without
+      # oversubscribing every compile across all cores.
+      nix.settings = {
+        max-jobs = 4;
+        cores = 2;
+        download-buffer-size = 268435456; # 256 MiB
+        http-connections = 50;
+      };
+
       nixos-containers = {
         hostAddress = "10.0.0.1";
         hostAddress6 = "fc00::1";
