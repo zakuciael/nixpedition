@@ -6,7 +6,13 @@
   ...
 }:
 let
-  inherit (lib) mkDefault getExe;
+  inherit (lib)
+    mkDefault
+    getExe
+    optionalAttrs
+    versionAtLeast
+    getVersion
+    ;
 in
 {
   den = {
@@ -25,7 +31,12 @@ in
 
     default = {
       nixos =
-        { pkgs, ... }:
+        {
+          pkgs,
+          config,
+          lib,
+          ...
+        }:
         {
           # Silence the `x86_64-darwin` deprecation warning.
           nixpkgs.config.allowDeprecatedx86_64Darwin = true;
@@ -85,7 +96,12 @@ in
 
               min-free = 15 * 1024 * 1024 * 1024; # 15 GiB
               max-free = 40 * 1024 * 1024 * 1024; # 40 GiB
+            }
+            // optionalAttrs (versionAtLeast (getVersion config.nix.package) "2.35") {
+              # Nix 2.35+: prefer HTTP/3 for substituters; ignored/absent on older nix.
+              http3 = true;
             };
+
             gc = {
               automatic = true;
               dates = "daily";
