@@ -52,6 +52,8 @@ in
               efiSupport = true;
               efiInstallAsRemovable = true;
               device = "nodev";
+              # Cap system profile generations so rollbacks do not pin the store.
+              configurationLimit = 5;
             };
           };
 
@@ -77,6 +79,15 @@ in
             settings = {
               auto-optimise-store = true;
               trusted-users = [ "@wheel" ];
+
+              min-free = 15 * 1024 * 1024 * 1024; # 15 GiB
+              max-free = 40 * 1024 * 1024 * 1024; # 40 GiB
+            };
+            gc = {
+              automatic = true;
+              dates = "daily";
+              randomizedDelaySec = "1h";
+              options = "--delete-older-than 7d";
             };
             extraOptions = ''
               experimental-features = nix-command flakes pipe-operators
