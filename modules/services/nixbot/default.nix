@@ -35,9 +35,7 @@
         # Readable by the nixbot user; survives prefetch's NIX_CONFIG override
         # of netrc-file (access-tokens stay from the system nix.conf).
         extraOptions = ''
-          !include ${
-            config.clan.core.vars.generators.nixbot-access-tokens.files."nix.conf".path
-          }
+          !include ${config.clan.core.vars.generators.nixbot-access-tokens.files."nix.conf".path}
         '';
       };
 
@@ -57,7 +55,7 @@
         # Disable nginx since it's enabled when using `useHTTPS` option
         nginx.enable = false;
 
-        buildSystems = build.systems;
+        buildSystems = build.systems |> (v: if builtins.isList v then v else lib.toList v);
         buildConcurrency = build.concurrency;
 
         evalWorkerCount = eval.worker_count;
