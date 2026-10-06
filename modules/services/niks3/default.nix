@@ -53,10 +53,13 @@
 
         gc = {
           enable = true;
-          olderThan = "336h"; # 14 days
-          failedUploadsOlderThan = "6h"; # 6 hours
-          schedule = "daily"; # Run at midnight daily
-          randomizedDelaySec = 1800; # Add 0-30 min random delay
+          olderThan = "720h"; # 30 days
+          # Floor is ~6h: orphan grace period uses this value, and it must
+          # exceed presigned URL validity (5h) so active uploads are not aborted.
+          failedUploadsOlderThan = "6h";
+          # After nightly nix-gc (daily + up to 1h), not at the same midnight.
+          schedule = "*-*-* 04:00:00";
+          randomizedDelaySec = 1800;
         };
 
         oidc.providers.github = {
