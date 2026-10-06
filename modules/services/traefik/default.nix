@@ -27,10 +27,13 @@
       cfg = config.services.traefik;
     in
     {
-      networking.firewall.allowedTCPPorts = [
-        80
-        443
-      ];
+      networking.firewall = {
+        allowedTCPPorts = [
+          80
+          443
+        ];
+        allowedUDPPorts = [ 443 ];
+      };
 
       services.traefik = {
         enable = true;
@@ -53,6 +56,7 @@
               address = ":443";
               asDefault = true;
               http.tls.certResolver = "cloudflare";
+              http3 = { };
             };
           };
 
