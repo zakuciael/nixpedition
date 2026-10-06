@@ -14,8 +14,14 @@
     };
 
   nixConfig = {
-    extra-substituters = [ "https://cache.zakku.eu" ];
-    extra-trusted-public-keys = [ "cache.zakku.eu-1:X219JrBeYMjhvMb0BXYci2gyAAiOQj4dGizzf+yCVcI=" ];
+    extra-substituters = [
+      "https://install.determinate.systems"
+      "https://cache.zakku.eu"
+    ];
+    extra-trusted-public-keys = [
+      "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM="
+      "cache.zakku.eu-1:X219JrBeYMjhvMb0BXYci2gyAAiOQj4dGizzf+yCVcI="
+    ];
   };
 
   inputs = {
@@ -29,6 +35,11 @@
       };
     };
     den.url = "github:vic/den/v0.17.0";
+    determinate.url = "https://flakehub.com/f/DeterminateSystems/determinate/*";
+    determinate-nix-eval-jobs = {
+      url = "github:DeterminateSystems/nix-eval-jobs/detsys";
+      flake = false;
+    };
     files.url = "github:mightyiam/files";
     flake-aspects.url = "github:vic/flake-aspects/v0.7.0";
     flake-compat = {

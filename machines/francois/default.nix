@@ -36,6 +36,11 @@
       nix.settings = {
         max-jobs = 4;
         cores = 2;
+
+        # Keep workers × eval-cores near host capacity. With Determinate
+        # parallel eval, prefer fewer workers and more threads per worker
+        # (heavy NixOS attrs benefit more than tiny package attrs).
+        eval-cores = 4;
       };
 
       nixos-containers = {

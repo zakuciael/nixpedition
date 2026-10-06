@@ -13,6 +13,7 @@
       host,
       config,
       lib,
+      pkgs,
       inputs',
       ...
     }:
@@ -26,12 +27,21 @@
         eval
         github
         ;
+
+      # Expose `.nix` the way Mic92's package does so the unit puts
+      # Determinate's nix CLI ahead of PATH.
+      determinate-nix-eval-jobs = pkgs.determinate-nix-eval-jobs.overrideAttrs (old: {
+        passthru = (old.passthru or { }) // {
+          nix = config.nix.package;
+        };
+      });
     in
     {
       imports = [ inputs.nixbot.nixosModules.nixbot ];
 
       nix = {
         settings.trusted-users = [ "nixbot" ];
+
         # Readable by the nixbot user; survives prefetch's NIX_CONFIG override
         # of netrc-file (access-tokens stay from the system nix.conf).
         extraOptions = ''
@@ -44,7 +54,10 @@
         inherit domain;
         useHTTPS = true;
 
-        packages = { inherit (inputs'.nixbot.packages) nixbot; };
+        packages = {
+          inherit (inputs'.nixbot.packages) nixbot;
+          nix-eval-jobs = determinate-nix-eval-jobs;
+        };
 
         # Users in this list are allowed to trigger builds and change settings.
         admins = [
