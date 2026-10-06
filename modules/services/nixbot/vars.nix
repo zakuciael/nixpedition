@@ -6,6 +6,56 @@
       lib,
       ...
     }:
+    let
+      inherit (lib)
+        mapAttrs
+        mapAttrs'
+        removePrefix
+        replaceStrings
+        ;
+
+      effectsTemplateName =
+        repo: "nixbot-effects-${replaceStrings [ "/" ] [ "-" ] (removePrefix "github:" repo)}";
+
+      git-author =
+        let
+          username = config.clan.core.vars.generators.nixbot-constants.files."github.app_user_name".value;
+          app_id = config.clan.core.vars.generators.nixbot-constants.files."github.app_user_id".value;
+        in
+        {
+          kind = "Secret";
+          data = {
+            inherit username;
+            email = "${app_id}+${username}@users.noreply.github.com";
+          };
+        };
+
+      sharedEffectsSecrets = {
+        inherit git-author;
+      };
+
+      mkEffectsSecrets = extras: sharedEffectsSecrets // extras;
+
+      effectRepos = {
+        "github:zakuciael/nixpedition" = mkEffectsSecrets {
+          "ci-ssh-keys" = {
+            kind = "Secret";
+            data = {
+              privateKey = config.sops.placeholder."vars/ci-ssh-keys/private-key-json";
+              publicKey = config.clan.core.vars.generators.ci-ssh-keys.files.authorized-key.value;
+            };
+          };
+          "ci-age-key" = {
+            kind = "Secret";
+            data = {
+              privateKey = config.sops.placeholder."vars/ci-age-key/private-key";
+              publicKey = config.clan.core.vars.generators.ci-age-key.files.public-key.value;
+            };
+          };
+        };
+        "github:zakuciael/nixos-dotfiles" = mkEffectsSecrets { };
+      };
+    in
     {
       clan.core.vars.generators = {
         "nixbot-constants" = {
@@ -134,39 +184,13 @@
         };
       };
 
-      sops.templates."nixbot-nixpedition-effects".file =
-        pkgs.writers.writeJSON "nixpedition-effects.json"
-          {
-            "ci-ssh-keys" = {
-              kind = "Secret";
-              data = {
-                privateKey = config.sops.placeholder."vars/ci-ssh-keys/private-key-json";
-                publicKey = config.clan.core.vars.generators.ci-ssh-keys.files.authorized-key.value;
-              };
-            };
-            "ci-age-key" = {
-              kind = "Secret";
-              data = {
-                privateKey = config.sops.placeholder."vars/ci-age-key/private-key";
-                publicKey = config.clan.core.vars.generators.ci-age-key.files.public-key.value;
-              };
-            };
-            "git-author" =
-              let
-                username = config.clan.core.vars.generators.nixbot-constants.files."github.app_user_name".value;
-                app_id = config.clan.core.vars.generators.nixbot-constants.files."github.app_user_id".value;
-              in
-              {
-                kind = "Secret";
-                data = {
-                  inherit username;
-                  email = "${app_id}+${username}@users.noreply.github.com";
-                };
-              };
-          };
+      sops.templates = mapAttrs' (repo: secrets: {
+        name = effectsTemplateName repo;
+        value.file = pkgs.writers.writeJSON "${effectsTemplateName repo}.json" secrets;
+      }) effectRepos;
 
-      services.nixbot.effects.perRepoSecretFiles = {
-        "github:zakuciael/nixpedition" = config.sops.templates."nixbot-nixpedition-effects".path;
-      };
+      services.nixbot.effects.perRepoSecretFiles = mapAttrs (
+        repo: _: config.sops.templates.${effectsTemplateName repo}.path
+      ) effectRepos;
     };
 }
