@@ -24,6 +24,9 @@
     {
       imports = [ inputs.niks3.nixosModules.default ];
 
+      # Keep the binary cache up through activation; restart after deploy.
+      clan.core.deployment.deferRestart = [ "niks3" ];
+
       virtualisation.vmVariant = {
         networking.firewall.allowedTCPPorts = [ port ];
         services.niks3.httpAddr = "0.0.0.0:${toString port}";

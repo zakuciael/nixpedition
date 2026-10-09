@@ -41,6 +41,9 @@
     {
       imports = [ inputs.nixbot.nixosModules.nixbot ];
 
+      # Keep Nixbot service through activation; restart after deploy.
+      clan.core.deployment.deferRestart = [ "nixbot" ];
+
       nix = {
         settings.trusted-users = [ "nixbot" ];
 
