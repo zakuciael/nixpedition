@@ -1,15 +1,25 @@
-{ inputs, ... }: {
+{ self, inputs, ... }:
+{
   hci-effects =
     {
       lib,
       config',
       hci-effects,
       pkgs,
-      inputs',
       system,
       ...
     }:
     let
+      inherit (lib)
+        concatMapAttrsStringSep
+        concatStringsSep
+        escapeShellArg
+        escapeShellArgs
+        filterAttrs
+        mapAttrs
+        optionalString
+        ;
+
       knownHostsName = "deploy.known_hosts";
       tfCfg = config'.terranix.terranixConfigurations.nixpedition;
       tfBinaryName = tfCfg.result.terraformWrapper.meta.mainProgram;
@@ -26,6 +36,73 @@
           ${tfBinaryName} apply -auto-approve
         '';
       };
+
+      deferRestarts =
+        self.nixosConfigurations
+        |> mapAttrs (
+          _: nixos:
+          let
+            cfg = nixos.config.clan.core.deployment;
+            net = nixos.config.clan.core.networking;
+          in
+          {
+            units = cfg.deferRestart;
+            include = !cfg.requireExplicitUpdate && net.targetHost != null && cfg.deferRestart != [ ];
+          }
+        )
+        |> filterAttrs (_: m: m.include)
+        |> mapAttrs (_: m: { inherit (m) units; });
+
+      clanSsh = machine: remoteCommands: /* bash */ ''
+        clan ssh ${escapeShellArg machine} --host-key-check accept-new -c ${lib.escapeShellArg remoteCommands}
+      '';
+
+      holdDeferredRestarts =
+        deferRestarts
+        |> concatMapAttrsStringSep "\n" (
+          machine: _: /* bash */ ''
+            echo "Holding defer-restart flock on ${machine}"
+            ${clanSsh machine ''
+              mkdir -p /run/clan-defer-restart && exec flock /run/clan-defer-restart/deploy.lock sleep infinity
+            ''} &
+          ''
+        );
+
+      # The hold above is started asynchronously; poll until its flock is held
+      # (flock -n fails ⇒ lock busy) or give up.
+      assertDeferredRestartHolds =
+        deferRestarts
+        |> concatMapAttrsStringSep "\n" (
+          machine: _: /* bash */ ''
+            held=0
+            for _ in $(seq 1 50); do
+              if ! ${clanSsh machine ''
+                flock -n /run/clan-defer-restart/deploy.lock true
+              ''}; then
+                held=1
+                break
+              fi
+              sleep 0.2
+            done
+            if [ "$held" -ne 1 ]; then
+              echo "defer-restart hold is not active on ${machine}" >&2
+              exit 1
+            fi
+          ''
+        );
+
+      scheduleDeferredRestarts =
+        deferRestarts
+        |> concatMapAttrsStringSep "\n" (
+          machine:
+          { units }:
+          /* bash */ ''
+            echo "Scheduling deferred restart on ${machine}: ${units |> concatStringsSep ", "}"
+            ${clanSsh machine ''
+              clan-defer-restart schedule ${escapeShellArgs units}
+            ''}
+          ''
+        );
     in
     {
       jobs = {
@@ -74,6 +151,11 @@
             '';
 
             effectScript = /* bash */ ''
+              # Hold host flocks for the whole effect.
+              # SSH sessions die with the sandbox; waiters then try-restart.
+              ${holdDeferredRestarts}
+              ${optionalString (deferRestarts != { }) assertDeferredRestartHolds}
+
               # Apply global Terraform configuration
               ${lib.getExe terraformScript}
 
@@ -84,9 +166,11 @@
                 git push origin HEAD:refs/heads/main
               fi
 
-              # Deploy Nix configuration to all machines
-              # clan machines update \
-              #   --host-key-check accept-new
+              clan machines update \
+                --host-key-check accept-new
+
+              # Queue restarts that block on the flocks held above.
+              ${scheduleDeferredRestarts}
             '';
           };
         };
