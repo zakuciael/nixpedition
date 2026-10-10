@@ -40,19 +40,19 @@ cmd_schedule() {
   local units=()
   while (($#)); do
     case "$1" in
-      -h | --help)
-        usage
-        exit 0
-        ;;
-      -*)
-        echo "unknown option: $1" >&2
-        usage >&2
-        exit 2
-        ;;
-      *)
-        units+=("$1")
-        shift
-        ;;
+    -h | --help)
+      usage
+      exit 0
+      ;;
+    -*)
+      echo "unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+    *)
+      units+=("$1")
+      shift
+      ;;
     esac
   done
 
@@ -74,8 +74,13 @@ cmd_schedule() {
   unitName="clan-defer-restart-${RANDOM}${RANDOM}"
 
   # Transient oneshot outside the nixbot cgroup. flock blocks until hold
-  # releases, then try-restart runs immediately (no grace delay).
+  # releases, then try-restart runs (no grace delay).
+  # --no-block: return after enqueue; do not wait for the oneshot (it stays
+  # blocked on the hold flock for the rest of the deploy effect).
+  # Use flock -c so the restart runs via /bin/sh (systemd's PATH may lack
+  # even basic utilities like true).
   systemd-run \
+    --no-block \
     --collect \
     --property=Type=oneshot \
     --unit="$unitName" \
@@ -91,22 +96,22 @@ main() {
   fi
 
   case "$1" in
-    hold)
-      shift
-      cmd_hold "$@"
-      ;;
-    schedule)
-      shift
-      cmd_schedule "$@"
-      ;;
-    -h | --help)
-      usage
-      ;;
-    *)
-      echo "unknown command: $1" >&2
-      usage >&2
-      exit 2
-      ;;
+  hold)
+    shift
+    cmd_hold "$@"
+    ;;
+  schedule)
+    shift
+    cmd_schedule "$@"
+    ;;
+  -h | --help)
+    usage
+    ;;
+  *)
+    echo "unknown command: $1" >&2
+    usage >&2
+    exit 2
+    ;;
   esac
 }
 
