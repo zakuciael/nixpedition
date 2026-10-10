@@ -221,7 +221,7 @@
               clan machines update \
                 --host-key-check accept-new
 
-              # Queue restarts that block on the flocks held above.
+              # Queue change-gated restarts/reloads that block on the flocks held above
               ${scheduleDeferredRestarts}
             '';
           };
