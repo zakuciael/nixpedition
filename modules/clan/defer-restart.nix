@@ -28,8 +28,9 @@
             Use this for services that run the deploy effect itself, or
             whose bounce would abort remote activation (e.g. sshd). The
             deploy effect holds a host flock for its lifetime and schedules
-            a `systemctl try-restart` that runs only after that flock is
-            released (effect sandbox gone).
+            deferred `systemctl try-restart` / `reload` only for units
+            whose definition changed, after that flock is released
+            (effect sandbox gone).
 
             Multiple modules may append; duplicates are removed.
           '';

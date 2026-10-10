@@ -1,0 +1,23 @@
+[package]
+name = "clan-defer-restart"
+version = "0.1.0"
+edition = "2021"
+description = "Hold a deploy flock and schedule deferred systemctl try-restart/reload after it releases"
+license = "MIT"
+
+[dependencies]
+command-run = "1.2"
+glob = "0.3"
+miette = { version = "7", features = ["fancy"] }
+nix = { version = "0.31", features = ["fs"] }
+rand = "0.10"
+rust-ini = { version = "0.21", features = ["inline-comment"] }
+shell-quote = { version = "0.8", default-features = false, features = ["sh"] }
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+usage-rs = { version = "7", features = ["completions"] }
+
+[profile.release]
+codegen-units = 1
+lto = true

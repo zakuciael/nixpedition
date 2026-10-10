@@ -15,6 +15,7 @@
           inputsFrom = [
             config.pre-commit.devShell or { }
             config.clan.devShell or { }
+            config.packages.clan-defer-restart
           ];
           packages = with pkgs; [
             statix
