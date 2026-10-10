@@ -6,7 +6,19 @@
 }:
 {
   den.hosts.x86_64-linux.francois.users = {
-    "zakuciael" = { };
+    "zakuciael" = {
+      lldap = {
+        create = true;
+        email = "me@krzysztofsaczuk.pl";
+        avatar = ../../assets/avatars/zakuciael.jpg;
+        displayName = "Krzysztof Saczuk";
+        firstName = "Krzysztof";
+        lastName = "Saczuk";
+        groups = [
+          { name = "lldap_admin"; }
+        ];
+      };
+    };
     "wittano" = { };
   };
 
@@ -19,6 +31,7 @@
       <services/terranix>
       <services/niks3>
       <services/nixbot>
+      <services/authelia>
     ];
 
     _.to-users.includes = [
