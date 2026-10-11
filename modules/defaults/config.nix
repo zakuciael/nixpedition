@@ -130,6 +130,9 @@ in
               LC_TIME = "pl_PL.UTF-8";
             };
           };
+
+          # Defaults for services that might or might not be enabled
+          services.postgresql.package = pkgs.postgresql_18_jit;
         };
 
       homeManager =
