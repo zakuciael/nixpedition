@@ -7,31 +7,15 @@
     in
     {
       binary-cache.http = {
-        routers = {
-          binary-cache = {
-            rule = "Host(`${domain}`) && !Path(`/`)";
-            entryPoints = [
-              "http"
-              "https"
-            ];
-            tls.certResolver = "cloudflare";
-            service = "binary-cache";
-          };
-          binary-cache-landing-page = {
-            rule = "Host(`${domain}`) && Path(`/`)";
-            entryPoints = [
-              "http"
-              "https"
-            ];
-            middlewares = [
-              "binary-cache-landing-page"
-            ];
-            tls.certResolver = "cloudflare";
-            service = "binary-cache";
-          };
+        routers.binary-cache = {
+          rule = "Host(`${domain}`)";
+          entryPoints = [
+            "http"
+            "https"
+          ];
+          tls.certResolver = "cloudflare";
+          service = "binary-cache";
         };
-
-        middlewares.binary-cache-landing-page.replacePath.path = "/index.html";
 
         serversTransports.binary-cache.forwardingTimeouts = {
           dialTimeout = cfg.nginx.proxyTimeout;

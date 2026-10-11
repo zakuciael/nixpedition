@@ -15,6 +15,7 @@
           files = {
             port.secret = false;
             domain.secret = false;
+            cacheDomain.secret = false;
             "s3.bucket_name".secret = false;
             "s3.endpoint".secret = false;
           };
@@ -26,7 +27,12 @@
               type = "line";
             };
             domain = {
-              description = "Domain for the niks3 server";
+              description = "Write/API domain for the niks3 server (e.g. niks3.example.com)";
+              persist = true;
+              type = "line";
+            };
+            cacheDomain = {
+              description = "Public binary-cache read domain (e.g. cache.example.com)";
               persist = true;
               type = "line";
             };
@@ -68,9 +74,11 @@
             "key.pub".secret = false;
           };
 
+          # Key name must stay cacheDomain-1 (e.g. cache.zakku.eu-1). Do not
+          # force-regenerate existing key material when updating this script.
           script = /* bash */ ''
             nix --extra-experimental-features "nix-command flakes" \
-              key generate-secret --key-name "${host.constants.services.binary-cache.domain}-1" > $out/key
+              key generate-secret --key-name "${host.constants.services.niks3.cacheDomain}-1" > $out/key
             nix --extra-experimental-features "nix-command flakes" \
               key convert-secret-to-public < $out/key > $out/key.pub
           '';
