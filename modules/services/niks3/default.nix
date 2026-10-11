@@ -19,7 +19,12 @@
       ...
     }:
     let
-      inherit (host.constants.services.niks3) domain port s3;
+      inherit (host.constants.services.niks3)
+        domain
+        cacheDomain
+        port
+        s3
+        ;
     in
     {
       imports = [ inputs.niks3.nixosModules.default ];
@@ -36,8 +41,9 @@
         enable = true;
         httpAddr = lib.mkDefault "127.0.0.1:${toString port}";
 
-        cacheUrl = "https://${domain}";
-        readProxy.enable = true;
+        cacheUrl = "https://${cacheDomain}";
+        serverUrl = "https://${domain}";
+        readProxy.enable = false;
         nginx.enable = false;
 
         apiTokenFile = config.clan.core.vars.generators.niks3-api-token.files.token.path;
