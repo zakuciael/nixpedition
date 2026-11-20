@@ -22,3 +22,9 @@ secrets.json
 
 # Ignore terraform state
 terraform/
+
+# Agent / AI scaffolding (local only)
+AGENTS.md
+CLAUDE.md
+docs/
+.scratch/
